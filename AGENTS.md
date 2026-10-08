@@ -44,6 +44,6 @@
 ## 프로젝트 플러그인
 
 - 설치 및 요구 사항은 [.agents/plugins/README.md](.agents/plugins/README.md)를 참고한다. 설치 명령은 `bash scripts/setup-codex-plugins.sh`이며, `.local/codex-plugins`의 공식 배포본을 사용한다.
-- 실제 LLM·Agents SDK 개발에는 `openai-developers`, 코딩 스킬 품질 평가에는 `plugin-eval`, Jira·Confluence 작업에는 인증된 `atlassian-rovo`를 사용한다.
+- 실제 LLM·Agents SDK 개발에는 `openai-developers`, 코딩 스킬 품질 평가에는 `plugin-eval`을 사용한다.
 - 플러그인 파일이 있다는 이유로 설치·인증·외부 시스템 연결이 완료되었다고 가정하지 않는다. 필요한 작업 전에 가용성을 확인한다.
 - 외부 메시지 발송이나 티켓 변경은 사용자가 해당 작업을 요청한 범위에서만 수행한다. 단순 플러그인 설치는 외부 데이터 쓰기를 허용하지 않는다.

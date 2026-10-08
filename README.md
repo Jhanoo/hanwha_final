@@ -31,7 +31,7 @@ python server.py
 
 ## Codex 개발 플러그인
 
-OpenAI Developers, Plugin Eval, Atlassian Rovo의 프로젝트 전용 설치 설정을 제공합니다. 저장소 루트에서 `bash scripts/setup-codex-plugins.sh`를 실행한 뒤 Codex를 재시작하세요. 요구 사항과 검증 범위는 [.agents/plugins/README.md](.agents/plugins/README.md)를 참고하세요.
+OpenAI Developers와 Plugin Eval의 프로젝트 전용 설치 설정을 제공합니다. 저장소 루트에서 `bash scripts/setup-codex-plugins.sh`를 실행한 뒤 Codex를 재시작하세요. 요구 사항과 검증 범위는 [.agents/plugins/README.md](.agents/plugins/README.md)를 참고하세요.
 
 ## 프로젝트 진행 스킬
 
