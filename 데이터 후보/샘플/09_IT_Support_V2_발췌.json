@@ -1,0 +1,16 @@
+{
+  "kind": "partial_excerpt_with_summary",
+  "source": "https://huggingface.co/datasets/benjaminmacklin/IT_Support_V2",
+  "checked_at": "2026-10-08",
+  "metadata_revision": "bbaf7b99593a9492594d5be414619c1ad33e1730",
+  "viewer_revision_pinned": false,
+  "config": "default",
+  "split": "train",
+  "row_index": 0,
+  "excerpt": {
+    "user": "Outlook cannot read emails from Exchange with large attachments.",
+    "assistant": "outlook_issue"
+  },
+  "summary_ko": "첫 user와 짧은 라벨 assistant만 발췌.",
+  "complete_training_record": false
+}

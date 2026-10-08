@@ -1,0 +1,16 @@
+{
+  "kind": "partial_excerpt_with_summary",
+  "source": "https://huggingface.co/datasets/waylake/ko-agentic-sft",
+  "checked_at": "2026-10-08",
+  "metadata_revision": "6636a7ea78d13b0040807ad6d19d1ff612bf636a",
+  "viewer_revision_pinned": false,
+  "config": "default",
+  "split": "train",
+  "row_index": 0,
+  "excerpt": {
+    "kind": "direct",
+    "has_action": false
+  },
+  "summary_ko": "첫 행은 문장 다듬기 요청에 도구 없이 답하는 direct 사례. 원문 대화 생략.",
+  "complete_training_record": false
+}

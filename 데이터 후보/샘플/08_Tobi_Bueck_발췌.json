@@ -1,0 +1,18 @@
+{
+  "kind": "partial_excerpt_with_summary",
+  "source": "https://huggingface.co/datasets/Tobi-Bueck/customer-support-tickets",
+  "checked_at": "2026-10-08",
+  "metadata_revision": "ddf1c81a5475992c4fa6752bf1e8b4e31f07bbeb",
+  "viewer_revision_pinned": false,
+  "config": "default",
+  "split": "train",
+  "row_index": 0,
+  "excerpt": {
+    "type": "Incident",
+    "queue": "Technical Support",
+    "priority": "high",
+    "language": "de"
+  },
+  "summary_ko": "첫 행은 여러 IT 장비 관련 보안 사고를 접수하는 독일어 합성 문의. 원문 본문과 answer 생략.",
+  "complete_training_record": false
+}

@@ -1,0 +1,16 @@
+{
+  "kind": "projected_benchmark_excerpt",
+  "source": "https://github.com/kakao/functionchat-bench/blob/main/data/FunctionChat-Singlecall.jsonl",
+  "checked_at": "2026-10-08",
+  "record_index": 0,
+  "function_name": "getTodayBoxOfficeRanking",
+  "query_excerpt": {
+    "serial_num": 1,
+    "content": "현재 박스오피스 순위가 궁금해요"
+  },
+  "parsed_ground_truth": {
+    "name": "getTodayBoxOfficeRanking",
+    "arguments": "{}"
+  },
+  "note": "원본 목록에서 한 문항을 발췌하고 ground_truth content를 파싱함. 학습 금지, 평가용"
+}

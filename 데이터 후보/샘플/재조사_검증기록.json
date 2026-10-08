@@ -1,0 +1,109 @@
+{
+  "checked_at": "2026-10-08",
+  "repository": {
+    "url": "https://github.com/Jhanoo/hanwha_final",
+    "commit": "81199515cb2b5b41b37d54347ca790d98259d643",
+    "inspection": "static_only"
+  },
+  "datasets": [
+    {
+      "dataset": "Console-AI/IT-helpdesk-synthetic-tickets",
+      "source": "https://huggingface.co/datasets/Console-AI/IT-helpdesk-synthetic-tickets",
+      "metadata_revision": "165693849d955c6da4c00bc8be8e541afec0514e",
+      "viewer_revision_pinned": false,
+      "license_label": "mit",
+      "inspection": {
+        "dataset": "Console-AI/IT-helpdesk-synthetic-tickets",
+        "total_rows": 500,
+        "inspected_rows": 100,
+        "truncated_rows": 0,
+        "sample_categories": [
+          "Account",
+          "Communication",
+          "Hardware",
+          "Infrastructure",
+          "Licensing",
+          "Network",
+          "RemoteWork",
+          "Security",
+          "Software",
+          "Training"
+        ]
+      },
+      "note": "first 100 rows, not random or full quality audit"
+    },
+    {
+      "dataset": "Tobi-Bueck/customer-support-tickets",
+      "source": "https://huggingface.co/datasets/Tobi-Bueck/customer-support-tickets",
+      "metadata_revision": "ddf1c81a5475992c4fa6752bf1e8b4e31f07bbeb",
+      "viewer_revision_pinned": false,
+      "license_label": "cc-by-nc-4.0",
+      "inspection": {
+        "dataset": "Tobi-Bueck/customer-support-tickets",
+        "total_rows": 61765,
+        "inspected_rows": 100,
+        "truncated_rows": 0,
+        "sample_queues": [
+          "Billing and Payments",
+          "Customer Service",
+          "General Inquiry",
+          "Human Resources",
+          "IT Support",
+          "Product Support",
+          "Returns and Exchanges",
+          "Sales and Pre-Sales",
+          "Service Outages and Maintenance",
+          "Technical Support"
+        ],
+        "sample_languages": [
+          "de",
+          "en"
+        ]
+      },
+      "note": "first 100 rows, not random or full quality audit"
+    },
+    {
+      "dataset": "benjaminmacklin/IT_Support_V2",
+      "source": "https://huggingface.co/datasets/benjaminmacklin/IT_Support_V2",
+      "metadata_revision": "bbaf7b99593a9492594d5be414619c1ad33e1730",
+      "viewer_revision_pinned": false,
+      "license_label": "mit",
+      "inspection": {
+        "dataset": "benjaminmacklin/IT_Support_V2",
+        "total_rows": 103226,
+        "inspected_rows": 100,
+        "truncated_rows": 0,
+        "two_turn_rows": 100,
+        "label_only_answers": 9,
+        "mack_persona_answers": 24
+      },
+      "note": "first 100 rows, not random or full quality audit"
+    },
+    {
+      "dataset": "waylake/ko-agentic-sft",
+      "source": "https://huggingface.co/datasets/waylake/ko-agentic-sft",
+      "metadata_revision": "6636a7ea78d13b0040807ad6d19d1ff612bf636a",
+      "viewer_revision_pinned": false,
+      "license_label": "apache-2.0",
+      "inspection": {
+        "dataset": "waylake/ko-agentic-sft",
+        "total_rows": 2369,
+        "inspected_rows": 100,
+        "truncated_rows": 0,
+        "sample_kinds": [
+          "calc",
+          "chain",
+          "direct",
+          "fail",
+          "mtool",
+          "multiturn",
+          "qa",
+          "refuse",
+          "single"
+        ],
+        "no_action_rows": 29
+      },
+      "note": "first 100 rows, not random or full quality audit"
+    }
+  ]
+}

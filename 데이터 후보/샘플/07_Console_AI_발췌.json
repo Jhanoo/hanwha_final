@@ -1,0 +1,17 @@
+{
+  "kind": "partial_excerpt_with_summary",
+  "source": "https://huggingface.co/datasets/Console-AI/IT-helpdesk-synthetic-tickets",
+  "checked_at": "2026-10-08",
+  "metadata_revision": "165693849d955c6da4c00bc8be8e541afec0514e",
+  "viewer_revision_pinned": false,
+  "config": "default",
+  "split": "train",
+  "row_index": 0,
+  "excerpt": {
+    "subject": "Hey IT! Our network printer keeps disconnecting.",
+    "category": "Network",
+    "priority": "Medium"
+  },
+  "summary_ko": "네트워크 프린터 연결이 간헐적으로 끊긴다는 문의. 본문은 생략.",
+  "complete_training_record": false
+}
