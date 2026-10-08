@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1320" viewBox="0 0 1920 1320">
+<defs>
+      <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L10,5 L0,10 z" fill="#516b84"/>
+      </marker>
+      <marker id="blue-arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+        <path d="M0,0 L10,5 L0,10 z" fill="#2878b9"/>
+      </marker>
+    </defs>
+<rect x="0" y="0" width="1920" height="1320" rx="0" fill="#f3f7fc" stroke="none" stroke-width="2"/>
+<rect x="22" y="20" width="500" height="125" rx="18" fill="#123f73" stroke="#123f73" stroke-width="2"/>
+<text x="272" y="70" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="38" font-weight="750" fill="#ffffff"><tspan x="272" dy="0">DeskMate</tspan></text>
+<text x="272" y="111" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="27" font-weight="700" fill="#ffffff"><tspan x="272" dy="0">사내 IT 지원 AI Agent 구조도</tspan></text>
+<rect x="540" y="20" width="720" height="125" rx="18" fill="#f8fbff" stroke="#c9dcf4" stroke-width="2"/>
+<rect x="558" y="34" width="120" height="42" rx="12" fill="#123f73" stroke="none" stroke-width="2"/>
+<text x="618.0" y="62" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="21" font-weight="700" fill="#ffffff"><tspan x="618.0" dy="0">목표</tspan></text>
+<text x="700" y="61" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="21" font-weight="600" fill="#18324b"><tspan x="700" dy="0">근거 기반으로 IT 문의를 안내하고,</tspan><tspan x="700" dy="32">미해결 이슈는 직원 승인 후 티켓으로 연결</tspan></text>
+<rect x="1278" y="20" width="620" height="125" rx="18" fill="#f8fbff" stroke="#c9dcf4" stroke-width="2"/>
+<rect x="1296" y="34" width="150" height="42" rx="12" fill="#123f73" stroke="none" stroke-width="2"/>
+<text x="1371.0" y="62" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="21" font-weight="700" fill="#ffffff"><tspan x="1371.0" dy="0">핵심 설계</tspan></text>
+<text x="1470" y="61" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="18" font-weight="550" fill="#18324b"><tspan x="1470" dy="0">Spring: 권한·티켓 쓰기 통제</tspan><tspan x="1470" dy="27">Python: Agent·RAG·모델 연동</tspan><tspan x="1470" dy="27">현재 구현과 목표 구성을 구분</tspan></text>
+<rect x="22" y="160" width="1876" height="140" rx="20" fill="#eaf3ff" stroke="#c8ddf5" stroke-width="2"/>
+<rect x="38" y="174" width="136" height="42" rx="12" fill="#123f73" stroke="none" stroke-width="2"/>
+<text x="106.0" y="202" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="21" font-weight="700" fill="#ffffff"><tspan x="106.0" dy="0">사용자 채널</tspan></text>
+<rect x="180" y="180" width="440" height="100" rx="16" fill="#ffffff" stroke="#c6d9ef" stroke-width="2"/>
+<rect x="180" y="180" width="440" height="42" rx="14" fill="#416b9e" stroke="#416b9e" stroke-width="0"/>
+<rect x="180" y="204" width="440" height="18" rx="0" fill="#416b9e" stroke="#416b9e" stroke-width="0"/>
+<text x="198" y="209" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="700" fill="#ffffff"><tspan x="198" dy="0">직원</tspan></text>
+<text x="198" y="250" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="450" fill="#18324b"><tspan x="198" dy="0">장애 문의 · 추가 질문 응답</tspan><tspan x="198" dy="24">해결 가이드 · 티켓 초안 확인</tspan></text>
+<rect x="640" y="180" width="440" height="100" rx="16" fill="#ffffff" stroke="#c6d9ef" stroke-width="2"/>
+<rect x="640" y="180" width="440" height="42" rx="14" fill="#416b9e" stroke="#416b9e" stroke-width="0"/>
+<rect x="640" y="204" width="440" height="18" rx="0" fill="#416b9e" stroke="#416b9e" stroke-width="0"/>
+<text x="658" y="209" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="700" fill="#ffffff"><tspan x="658" dy="0">IT 담당자</tspan></text>
+<text x="658" y="250" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="450" fill="#18324b"><tspan x="658" dy="0">담당 티켓 확인 · 조치 기록</tspan><tspan x="658" dy="24">상태 변경 · 해결 결과 입력</tspan></text>
+<rect x="1100" y="180" width="440" height="100" rx="16" fill="#ffffff" stroke="#c6d9ef" stroke-width="2"/>
+<rect x="1100" y="180" width="440" height="42" rx="14" fill="#416b9e" stroke="#416b9e" stroke-width="0"/>
+<rect x="1100" y="204" width="440" height="18" rx="0" fill="#416b9e" stroke="#416b9e" stroke-width="0"/>
+<text x="1118" y="209" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="700" fill="#ffffff"><tspan x="1118" dy="0">IT 관리자</tspan></text>
+<text x="1118" y="250" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="450" fill="#18324b"><tspan x="1118" dy="0">담당자 배정·재배정</tspan><tspan x="1118" dy="24">미할당·예외 상황 처리</tspan></text>
+<rect x="1560" y="194" width="290" height="32" rx="15" fill="#dceeff" stroke="#9ac4ec" stroke-width="1.5"/>
+<text x="1705.0" y="216" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="600" fill="#255f95"><tspan x="1705.0" dy="0">Web UI → Spring API</tspan></text>
+<text x="1705" y="250" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="14" font-weight="500" fill="#516b84"><tspan x="1705" dy="0">브라우저는 Python AI를 직접 호출하지 않음</tspan></text>
+<rect x="22" y="315" width="1876" height="340" rx="20" fill="#ffffff" stroke="#d8e4ef" stroke-width="2"/>
+<rect x="38" y="329" width="136" height="42" rx="12" fill="#123f73" stroke="none" stroke-width="2"/>
+<text x="106.0" y="357" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="21" font-weight="700" fill="#ffffff"><tspan x="106.0" dy="0">AI 상담 흐름</tspan></text>
+<rect x="180" y="375" width="355" height="245" rx="18" fill="#dceeff" stroke="#9ac4ec" stroke-width="2"/>
+<rect x="180" y="375" width="355" height="48" rx="16" fill="#2878b9" stroke="#2878b9" stroke-width="0"/>
+<rect x="180" y="407" width="355" height="16" rx="0" fill="#2878b9" stroke="#2878b9" stroke-width="0"/>
+<text x="357" y="407" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="21" font-weight="700" fill="#ffffff"><tspan x="357" dy="0">Spring Boot · 제품 백엔드</tspan></text>
+<rect x="198" y="440" width="319" height="68" rx="16" fill="#ffffff" stroke="#c6d9ef" stroke-width="2"/>
+<rect x="198" y="440" width="319" height="42" rx="14" fill="#2878b9" stroke="#2878b9" stroke-width="0"/>
+<rect x="198" y="464" width="319" height="18" rx="0" fill="#2878b9" stroke="#2878b9" stroke-width="0"/>
+<text x="216" y="469" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="700" fill="#ffffff"><tspan x="216" dy="0">공개 API</tspan></text>
+<text x="216" y="510" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="450" fill="#18324b"><tspan x="216" dy="0">인증·인가 · 입력 검증</tspan></text>
+<rect x="198" y="520" width="319" height="68" rx="16" fill="#ffffff" stroke="#c6d9ef" stroke-width="2"/>
+<rect x="198" y="520" width="319" height="42" rx="14" fill="#2878b9" stroke="#2878b9" stroke-width="0"/>
+<rect x="198" y="544" width="319" height="18" rx="0" fill="#2878b9" stroke="#2878b9" stroke-width="0"/>
+<text x="216" y="549" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="700" fill="#ffffff"><tspan x="216" dy="0">업무 서비스</tspan></text>
+<text x="216" y="590" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="450" fill="#18324b"><tspan x="216" dy="0">대화 · 승인 · 티켓 · 배정</tspan></text>
+<rect x="235" y="594" width="245" height="32" rx="15" fill="#e8f3fc" stroke="#9ac4ec" stroke-width="1.5"/>
+<text x="357.5" y="616" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="14" font-weight="600" fill="#255f95"><tspan x="357.5" dy="0">티켓 쓰기 권한은 Spring에만</tspan></text>
+<rect x="565" y="375" width="1315" height="245" rx="18" fill="#fffaf0" stroke="#f0d8a8" stroke-width="2"/>
+<rect x="565" y="375" width="1315" height="48" rx="16" fill="#c58618" stroke="#c58618" stroke-width="0"/>
+<rect x="565" y="407" width="1315" height="16" rx="0" fill="#c58618" stroke="#c58618" stroke-width="0"/>
+<text x="1222" y="407" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="21" font-weight="700" fill="#ffffff"><tspan x="1222" dy="0">Python AI Service · 내부 서비스 · 목표 구성</tspan></text>
+<rect x="888" y="431" width="664" height="32" rx="15" fill="#ffffff" stroke="#efc77d" stroke-width="1.5"/>
+<text x="1220.0" y="453" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="15" font-weight="600" fill="#80550e"><tspan x="1220.0" dy="0">Spring ↔ Python: 내부 HTTP/JSON · 최소 상담 문맥 · request_id</tspan></text>
+<rect x="585" y="472" width="290" height="122" rx="16" fill="#ffffff" stroke="#e8d4af" stroke-width="2"/>
+<rect x="585" y="472" width="290" height="42" rx="14" fill="#b47410" stroke="#b47410" stroke-width="0"/>
+<rect x="585" y="496" width="290" height="18" rx="0" fill="#b47410" stroke="#b47410" stroke-width="0"/>
+<circle cx="611" cy="493" r="15" fill="#ffffff"/>
+<text x="611" y="499" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="800" fill="#b47410"><tspan x="611" dy="0">1</tspan></text>
+<text x="637" y="501" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="700" fill="#ffffff"><tspan x="637" dy="0">증상 파악</tspan></text>
+<text x="603" y="542" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="450" fill="#18324b"><tspan x="603" dy="0">분류 · 필요한 정보 확인</tspan><tspan x="603" dy="24">부족하면 추가 질문</tspan></text>
+<rect x="903" y="472" width="290" height="122" rx="16" fill="#ffffff" stroke="#d9c9f1" stroke-width="2"/>
+<rect x="903" y="472" width="290" height="42" rx="14" fill="#7953b5" stroke="#7953b5" stroke-width="0"/>
+<rect x="903" y="496" width="290" height="18" rx="0" fill="#7953b5" stroke="#7953b5" stroke-width="0"/>
+<circle cx="929" cy="493" r="15" fill="#ffffff"/>
+<text x="929" y="499" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="800" fill="#7953b5"><tspan x="929" dy="0">2</tspan></text>
+<text x="955" y="501" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="700" fill="#ffffff"><tspan x="955" dy="0">지식 검색</tspan></text>
+<text x="921" y="542" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="450" fill="#18324b"><tspan x="921" dy="0">승인된 가이드에서 검색</tspan><tspan x="921" dy="24">출처·버전·근거 구절 반환</tspan></text>
+<rect x="1221" y="472" width="290" height="122" rx="16" fill="#ffffff" stroke="#c4e8e3" stroke-width="2"/>
+<rect x="1221" y="472" width="290" height="42" rx="14" fill="#21877d" stroke="#21877d" stroke-width="0"/>
+<rect x="1221" y="496" width="290" height="18" rx="0" fill="#21877d" stroke="#21877d" stroke-width="0"/>
+<circle cx="1247" cy="493" r="15" fill="#ffffff"/>
+<text x="1247" y="499" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="800" fill="#21877d"><tspan x="1247" dy="0">3</tspan></text>
+<text x="1273" y="501" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="700" fill="#ffffff"><tspan x="1273" dy="0">근거 기반 안내</tspan></text>
+<text x="1239" y="542" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="450" fill="#18324b"><tspan x="1239" dy="0">검색 결과를 바탕으로 답변</tspan><tspan x="1239" dy="24">근거 부족 시 해결책 추측 금지</tspan></text>
+<rect x="1539" y="472" width="320" height="122" rx="16" fill="#ffffff" stroke="#f2d4bc" stroke-width="2"/>
+<rect x="1539" y="472" width="320" height="42" rx="14" fill="#c06b24" stroke="#c06b24" stroke-width="0"/>
+<rect x="1539" y="496" width="320" height="18" rx="0" fill="#c06b24" stroke="#c06b24" stroke-width="0"/>
+<circle cx="1565" cy="493" r="15" fill="#ffffff"/>
+<text x="1565" y="499" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="800" fill="#c06b24"><tspan x="1565" dy="0">4</tspan></text>
+<text x="1591" y="501" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="700" fill="#ffffff"><tspan x="1591" dy="0">티켓 초안 제안</tspan></text>
+<text x="1557" y="542" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="450" fill="#18324b"><tspan x="1557" dy="0">미해결이면 사실 중심 초안</tspan><tspan x="1557" dy="24">초안은 확정 티켓이 아님</tspan></text>
+<line x1="875" y1="532" x2="898" y2="532" stroke="#b47410" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="1193" y1="532" x2="1216" y2="532" stroke="#7953b5" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="1511" y1="532" x2="1534" y2="532" stroke="#21877d" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="535" y1="489" x2="559" y2="489" stroke="#2878b9" stroke-width="3" marker-end="url(#arrow)"/>
+<line x1="565" y1="575" x2="535" y2="575" stroke="#2878b9" stroke-width="2.5" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+<text x="1522" y="458" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="13" font-weight="600" fill="#9a5a1c"><tspan x="1522" dy="0">해결되지 않은 경우에만</tspan></text>
+<rect x="22" y="670" width="1876" height="180" rx="20" fill="#eaf3ff" stroke="#c8ddf5" stroke-width="2"/>
+<rect x="38" y="684" width="136" height="42" rx="12" fill="#123f73" stroke="none" stroke-width="2"/>
+<text x="106.0" y="712" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="21" font-weight="700" fill="#ffffff"><tspan x="106.0" dy="0">서비스·도구</tspan></text>
+<rect x="180" y="722" width="600" height="105" rx="16" fill="#ffffff" stroke="#c6d9ef" stroke-width="2"/>
+<text x="200" y="752" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="700" fill="#255f95"><tspan x="200" dy="0">Spring 업무 기능</tspan></text>
+<rect x="200" y="775" width="165" height="32" rx="15" fill="#dceeff" stroke="#9ac4ec" stroke-width="1.5"/>
+<text x="282.5" y="797" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="600" fill="#18324b"><tspan x="282.5" dy="0">인증·인가</tspan></text>
+<rect x="377" y="775" width="165" height="32" rx="15" fill="#dceeff" stroke="#9ac4ec" stroke-width="1.5"/>
+<text x="459.5" y="797" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="600" fill="#18324b"><tspan x="459.5" dy="0">승인 경계</tspan></text>
+<rect x="554" y="775" width="205" height="32" rx="15" fill="#dceeff" stroke="#9ac4ec" stroke-width="1.5"/>
+<text x="656.5" y="797" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="600" fill="#18324b"><tspan x="656.5" dy="0">티켓·담당자 배정</tspan></text>
+<rect x="800" y="722" width="610" height="105" rx="16" fill="#ffffff" stroke="#e8d4af" stroke-width="2"/>
+<text x="820" y="752" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="700" fill="#80550e"><tspan x="820" dy="0">Python AI 기능</tspan></text>
+<rect x="820" y="775" width="170" height="32" rx="15" fill="#fff1d8" stroke="#efc77d" stroke-width="1.5"/>
+<text x="905.0" y="797" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="600" fill="#80550e"><tspan x="905.0" dy="0">Agents SDK 후보</tspan></text>
+<rect x="1002" y="775" width="170" height="32" rx="15" fill="#f0e8ff" stroke="#c9b2f1" stroke-width="1.5"/>
+<text x="1087.0" y="797" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="600" fill="#67449a"><tspan x="1087.0" dy="0">RAG Retriever</tspan></text>
+<rect x="1184" y="775" width="205" height="32" rx="15" fill="#fff1d8" stroke="#efc77d" stroke-width="1.5"/>
+<text x="1286.5" y="797" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="600" fill="#80550e"><tspan x="1286.5" dy="0">평가·문서 ingestion</tspan></text>
+<rect x="1430" y="722" width="450" height="105" rx="16" fill="#ffffff" stroke="#d8c8ed" stroke-width="2"/>
+<text x="1450" y="752" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="19" font-weight="700" fill="#67449a"><tspan x="1450" dy="0">외부 모델 API · 후보 미확정</tspan></text>
+<rect x="1450" y="775" width="190" height="32" rx="15" fill="#f0e8ff" stroke="#c9b2f1" stroke-width="1.5"/>
+<text x="1545.0" y="797" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="600" fill="#67449a"><tspan x="1545.0" dy="0">LLM 생성 API</tspan></text>
+<rect x="1650" y="775" width="210" height="32" rx="15" fill="#f0e8ff" stroke="#c9b2f1" stroke-width="1.5"/>
+<text x="1755.0" y="797" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="600" fill="#67449a"><tspan x="1755.0" dy="0">Embedding API</tspan></text>
+<rect x="22" y="865" width="1876" height="200" rx="20" fill="#ffffff" stroke="#d8e4ef" stroke-width="2"/>
+<rect x="38" y="879" width="136" height="42" rx="12" fill="#123f73" stroke="none" stroke-width="2"/>
+<text x="106.0" y="907" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="21" font-weight="700" fill="#ffffff"><tspan x="106.0" dy="0">데이터 계층</tspan></text>
+<rect x="180" y="917" width="890" height="128" rx="16" fill="#f7fbff" stroke="#b9d1e8" stroke-width="2"/>
+<rect x="180" y="917" width="890" height="36" rx="14" fill="#356c9e" stroke="#356c9e" stroke-width="0"/>
+<rect x="180" y="939" width="890" height="14" rx="0" fill="#356c9e" stroke="#356c9e" stroke-width="0"/>
+<text x="625" y="942" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="18" font-weight="700" fill="#ffffff"><tspan x="625" dy="0">PostgreSQL + pgvector · 한 인스턴스 목표 · DB role 분리</tspan></text>
+<text x="205" y="980" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="700" fill="#255f95"><tspan x="205" dy="0">Spring 소유</tspan></text>
+<text x="205" y="1007" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="500" fill="#18324b"><tspan x="205" dy="0">상담 · 메시지 · 승인</tspan><tspan x="205" dy="22">티켓 · 상태 이벤트 · 할당</tspan></text>
+<line x1="610" y1="965" x2="610" y2="1030" stroke="#cad8e5" stroke-width="2"/>
+<text x="640" y="980" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="700" fill="#80550e"><tspan x="640" dy="0">Python AI 소유</tspan></text>
+<text x="640" y="1007" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="500" fill="#18324b"><tspan x="640" dy="0">knowledge_documents</tspan><tspan x="640" dy="22">knowledge_chunks · vector(1536)</tspan></text>
+<rect x="1090" y="917" width="350" height="128" rx="16" fill="#ffffff" stroke="#d8e4ef" stroke-width="2"/>
+<rect x="1090" y="917" width="350" height="42" rx="14" fill="#21877d" stroke="#21877d" stroke-width="0"/>
+<rect x="1090" y="941" width="350" height="18" rx="0" fill="#21877d" stroke="#21877d" stroke-width="0"/>
+<text x="1108" y="946" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="700" fill="#ffffff"><tspan x="1108" dy="0">지식 자료</tspan></text>
+<text x="1108" y="987" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="450" fill="#18324b"><tspan x="1108" dy="0">승인된 공식·내부 가이드</tspan><tspan x="1108" dy="24">synthetic 데모 문서</tspan></text>
+<rect x="1460" y="917" width="420" height="128" rx="16" fill="#ffffff" stroke="#d8e4ef" stroke-width="2"/>
+<rect x="1460" y="917" width="420" height="42" rx="14" fill="#7953b5" stroke="#7953b5" stroke-width="0"/>
+<rect x="1460" y="941" width="420" height="18" rx="0" fill="#7953b5" stroke="#7953b5" stroke-width="0"/>
+<text x="1478" y="946" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="700" fill="#ffffff"><tspan x="1478" dy="0">학습·평가 자료</tspan></text>
+<text x="1478" y="987" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="450" fill="#18324b"><tspan x="1478" dy="0">공개 후보는 보조 자료</tspan><tspan x="1478" dy="24">고정 평가셋·검수 사례 필요</tspan></text>
+<line x1="1090" y1="985" x2="1076" y2="985" stroke="#c58618" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+<rect x="22" y="1080" width="1876" height="112" rx="20" fill="#fff0f3" stroke="#f1b9c8" stroke-width="2"/>
+<rect x="38" y="1094" width="136" height="42" rx="12" fill="#123f73" stroke="none" stroke-width="2"/>
+<text x="106.0" y="1122" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="21" font-weight="700" fill="#ffffff"><tspan x="106.0" dy="0">보안·거버넌스</tspan></text>
+<rect x="180" y="1135" width="380" height="32" rx="15" fill="#ffffff" stroke="#f1b9c8" stroke-width="1.5"/>
+<text x="370.0" y="1157" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="600" fill="#9f3151"><tspan x="370.0" dy="0">인증·역할 기반 접근 · 목표</tspan></text>
+<rect x="580" y="1135" width="380" height="32" rx="15" fill="#ffffff" stroke="#f1b9c8" stroke-width="1.5"/>
+<text x="770.0" y="1157" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="600" fill="#9f3151"><tspan x="770.0" dy="0">개인정보 최소 전송 · 목표</tspan></text>
+<rect x="980" y="1135" width="380" height="32" rx="15" fill="#ffffff" stroke="#f1b9c8" stroke-width="1.5"/>
+<text x="1170.0" y="1157" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="600" fill="#9f3151"><tspan x="1170.0" dy="0">직원 승인 전 티켓 생성 금지</tspan></text>
+<rect x="1380" y="1135" width="480" height="32" rx="15" fill="#ffffff" stroke="#f1b9c8" stroke-width="1.5"/>
+<text x="1620.0" y="1157" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="16" font-weight="600" fill="#9f3151"><tspan x="1620.0" dy="0">요청 ID · 출처 · 모델/인덱스 버전 관측</tspan></text>
+<rect x="22" y="1215" width="1876" height="85" rx="16" fill="#e8eef5" stroke="#cbd7e2" stroke-width="2"/>
+<rect x="42" y="1237" width="180" height="32" rx="15" fill="#e4f5eb" stroke="#9dd6b1" stroke-width="1.5"/>
+<text x="132.0" y="1259" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="600" fill="#236a45"><tspan x="132.0" dy="0">현재 구현</tspan></text>
+<text x="245" y="1265" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="20" font-weight="600" fill="#18324b"><tspan x="245" dy="0">정적 Web UI  →  Python 규칙 상담  →  PostgreSQL 티켓</tspan></text>
+<line x1="995" y1="1230" x2="995" y2="1286" stroke="#b8c6d4" stroke-width="2"/>
+<rect x="1020" y="1237" width="180" height="32" rx="15" fill="#dceeff" stroke="#9ac4ec" stroke-width="1.5"/>
+<text x="1110.0" y="1259" text-anchor="middle" font-family="Noto Sans CJK KR, sans-serif" font-size="17" font-weight="600" fill="#255f95"><tspan x="1110.0" dy="0">목표 구성</tspan></text>
+<text x="1220" y="1265" text-anchor="start" font-family="Noto Sans CJK KR, sans-serif" font-size="19" font-weight="600" fill="#18324b"><tspan x="1220" dy="0">Spring 업무 백엔드  +  Python AI/RAG  +  PostgreSQL/pgvector</tspan></text>
+</svg>

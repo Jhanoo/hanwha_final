@@ -49,6 +49,8 @@ LLM 선택과 학습 데이터의 현실성은 [LLM 선택과 데이터 전략](
 
 현재 구현과 목표 혼합 구성을 구분한 [아키텍처 문서](docs/architecture.md), [업무 워크플로우 설계](설계/플로우차트_및_아키텍처.md)와 그림입니다.
 
-![DeskMate 현재 구현과 목표 AI 구성도](docs/architecture.png)
+![DeskMate 프로젝트 구조도](docs/project-architecture.png)
+
+[확대 가능한 SVG 원본](docs/project-architecture.svg)
 
 ![DeskMate 직원 상담부터 티켓 처리까지의 워크플로우](docs/workflow.png)

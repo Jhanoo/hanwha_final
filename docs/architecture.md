@@ -4,6 +4,8 @@
 
 현재 앱은 Python HTTP 서버, 정적 웹 UI, 규칙 기반 상담, PostgreSQL 티켓 저장으로 동작한다. 목표는 **Spring Boot를 제품 백엔드로 두고 Python 서비스를 AI 전용 런타임으로 분리**하는 혼합 구성이다. 이 문서는 설계안이며, Spring 이관·LLM·RAG는 아직 구현되지 않았다.
 
+![DeskMate 프로젝트 구조도](project-architecture.png)
+
 ![DeskMate 현재 구현과 Spring·Python 목표 아키텍처](architecture.png)
 
 초록 실선은 현재 구현, 파란 점선은 계획된 서비스 흐름, 주황 점선은 데이터 적재 경로다.
