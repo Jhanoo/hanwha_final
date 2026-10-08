@@ -7,3 +7,4 @@ output/playwright/
 .env.*
 !.env.example
 .pytest_cache/
+.DS_Store
