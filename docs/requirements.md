@@ -72,14 +72,14 @@
 
 | ID | PRD ID | 요구사항 | 우선순위 | 상태 |
 | --- | --- | --- | --- | --- |
-| FR-011 | PRD-002, PRD-005 | Agent는 PostgreSQL에 metadata와 연결된 1536차원 embedding을 저장하고 pgvector cosine 검색 결과를 반환해야 한다. | P0 | 목표, migration 초안 존재 |
-| FR-012 | PRD-003~005 | 대화·티켓·승인·상태 이력은 PostgreSQL FK·CHECK 제약과 transaction을 통해 일관성을 유지해야 한다. | P0 | 목표, migration 초안 존재 |
+| FR-011 | PRD-002, PRD-005 | Agent는 PostgreSQL에 metadata와 연결된 1536차원 embedding을 저장하고 pgvector cosine 검색 결과를 반환해야 한다. | P0 | 미구현 목표, schema만 준비 |
+| FR-012 | PRD-003~005 | 대화·티켓·승인·상태 이력은 PostgreSQL FK·CHECK 제약과 transaction을 통해 일관성을 유지해야 한다. | P0 | schema는 준비, 앱 기능 일부 구현 |
 | NFR-007 | PRD-002 | top-k retrieval은 pgvector index를 활용하고 평가 corpus에서 recall·지연을 계측해야 한다. | P0 | 목표, 미검증 |
 | NFR-008 | PRD-004 | ticket row는 승인 ID와 conversation ID를 composite FK로 연결하고 idempotency key가 unique해야 한다. | P0 | 목표, migration 초안 존재 |
 
 ## 상태와 미결정 사항
 
-- **현재 구현:** 규칙 기반 상담, SQLite 티켓 CRUD 일부, 정적 UI.
+- **현재 구현:** 규칙 기반 상담, PostgreSQL 티켓 생성·조회·상태 변경, 정적 UI.
 - **미구현 목표:** OpenAI Agents SDK, 임베딩 기반 retrieval, 근거 인용, explicit approval gate, idempotency, 평가 harness.
 - **결정 필요:** 모델 이름, embedding model, 검색 chunk 크기·top-k, DB 벡터 저장 방식, UI trace 노출 범위.
 - **보안 제한:** 실제 사내 데이터·계정 없이 synthetic dataset으로 시작.

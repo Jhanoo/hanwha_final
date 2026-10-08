@@ -2,7 +2,7 @@
 
 ## 기준선과 목표
 
-**현재 구현:** Python 표준 라이브러리 HTTP 서버, 정적 웹 UI, 키워드 기반 `diagnose`, SQLite 티켓 테이블. 외부 LLM·RAG·인증은 없다.
+**현재 구현:** Python HTTP 서버, 정적 웹 UI, 키워드 기반 `diagnose`, PostgreSQL + pgvector schema와 ticket API. 외부 LLM·embedding ingestion·RAG·인증은 없다.
 
 **목표 시연 구조:** Python 웹 서버를 유지하며 상담 API에 OpenAI Agents SDK 단일 Agent를 추가한다. synthetic 지식 문서를 임베딩해 PostgreSQL + pgvector에서 검색하고, 명시적 schema가 있는 함수 도구를 호출한다. 티켓·대화·승인·지식 chunk를 PostgreSQL에 저장한다.
 

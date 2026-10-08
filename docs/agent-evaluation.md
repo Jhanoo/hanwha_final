@@ -8,7 +8,7 @@
 
 ## 고정 평가 사례 초안
 
-실제 계정·기밀 정보 없이 `evals/cases.jsonl`에 가상 사례를 최소 20개 작성한다. 범위: VPN/계정/메일, 문서에 없는 문의, 모호한 증상, 영향 범위가 큰 장애, 사용자 비밀번호 포함, prompt injection 문서, 모델 timeout, 중복 접수, 승인 거부, 티켓 tool 오류.
+실제 계정·기밀 정보 없이 `evals/cases.jsonl`에 가상 사례 60개를 제안한다(개발용 40개, holdout 20개). 이는 초기 소규모 시연 기준이며 실패 유형과 사례별 결과를 함께 검토한다. 범위: VPN/계정/메일, 문서에 없는 문의, 모호한 증상, 영향 범위가 큰 장애, 사용자 비밀번호 포함, prompt injection 문서, 모델 timeout, 중복 접수, 승인 거부, 티켓 tool 오류.
 
 각 사례 필드: `case_id`, `user_messages`, `expected_category`, `required_clarifying_slots`, `expected_source_ids`, `answer_claims_supported`, `expected_tools`, `must_not_call`, `expected_handoff`, `expected_ticket_fields`.
 
