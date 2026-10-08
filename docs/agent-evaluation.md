@@ -8,7 +8,7 @@
 
 ## 고정 평가 사례 초안
 
-실제 계정·기밀 정보 없이 `evals/cases.jsonl`에 가상 사례 60개를 제안한다(개발용 40개, holdout 20개). 이는 초기 소규모 시연 기준이며 실패 유형과 사례별 결과를 함께 검토한다. 범위: VPN/계정/메일, 문서에 없는 문의, 모호한 증상, 영향 범위가 큰 장애, 사용자 비밀번호 포함, prompt injection 문서, 모델 timeout, 중복 접수, 승인 거부, 티켓 tool 오류.
+실제 계정·기밀 정보 없이 `evals/cases.jsonl`에 가상 사례 60개를 제안한다(개발용 40개, holdout 20개). 이는 초기 소규모 시연 기준이며 실패 유형과 사례별 결과를 함께 검토한다. 주 범위: 가상 매출 조회 조건 오류·집계 코드 오류·근거 부족·담당 팀 연결. 추가 범위: 문서에 없는 문의, 모호한 증상, 영향 범위가 큰 장애, 사용자 비밀번호 포함, prompt injection 문서, 모델 timeout, 중복 접수, 승인 거부, 티켓 tool 오류.
 
 각 사례 필드: `case_id`, `user_messages`, `expected_category`, `required_clarifying_slots`, `expected_source_ids`, `answer_claims_supported`, `expected_tools`, `must_not_call`, `expected_handoff`, `expected_ticket_fields`.
 
@@ -39,3 +39,11 @@
 ## 외부 모델 미사용 시
 
 API credential이나 네트워크가 준비되지 않은 경우 retrieval과 승인 로직은 stub으로 확인할 수 있지만, 이를 LLM/RAG 생성 품질 측정으로 표시하지 않는다. 모델 기반 평가 결과는 **미실행**으로 기록한다.
+
+## 시스템 조사 평가 확장
+
+60건은 신규 시스템 진단 방향으로 재구성하며 아직 평가 파일은 없다. 조건 오류 12건, 코드 오류 12건, 원천 데이터 이상/기타 원인 8건, 근거·snapshot 부족 8건, 권한·인젝션 8건, 승인·소유 팀·중복/도구 실패 12건을 제안한다. 각 유형을 개발/holdout에 배분하되 같은 원본 fixture/변형은 한 분할에만 둔다.
+
+추가 필드: `fixture_version`, `deployed_commit`, `expected_observed_facts`, `gold_evidence_ids`, `allowed_hypotheses`, `forbidden_claims`, `expected_owner_team_id`, `expected_next_action`, `tool_budget`.
+
+추가 지표: 근거 없는 원인 확정 수, 관측값 왜곡 수, 허용되지 않은 조회 수, 배포 버전 불일치 탐지, 유효 팀 추천 정확도, 미등록 팀 보류, 초안 재현 정보 충족률, 조사 호출 수/지연. DB·코드 확인 실패를 정상으로 보고하거나 존재하지 않는 담당자를 배정한 횟수는 0건을 제안 목표로 한다. 실제 결과는 미측정이다.

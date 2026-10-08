@@ -17,9 +17,16 @@
 ## 2단계: Spring 백엔드와 Python AI 서비스 계약
 
 - Spring Boot 제품 API와 Python AI Service의 책임·데이터 소유권을 설계 문서대로 분리.
-- Spring은 인증, 상담 세션, 승인, 티켓과 담당자 할당을 소유하고 Python은 AI 응답과 지식 검색만 담당.
+- Spring은 인증, 상담 세션, 승인, 티켓과 담당자 할당을 소유하고 Python은 조사 계획·읽기 도구 선택·AI 응답을 담당.
 - `POST /internal/v1/assist` schema, 내부 인증, timeout, request ID, 오류 응답을 확정.
 - 완료 기준: Web UI는 Spring만 호출하고, Spring↔Python 간 정상·오류 응답 계약이 고정됨.
+
+## 2.1단계: 시스템 조사 fixture와 읽기 도구
+
+- PRD-008~010 / FR-013~019: 가상 매출 시스템 snapshot·API 결과·코드·로그·소유 팀 registry를 같은 버전으로 제작.
+- Spring Gateway에서 허용 query ID, 입력 schema, 권한, 조회 예산을 강제하고 업무 DB 쓰기 금지.
+- Python은 Gateway 응답의 evidence ID로 사실·가설을 구성하고 배포 버전과 관측 시점 불일치를 표시.
+- 완료 기준: 조건 오류는 직원 해결, 집계 코드 오류는 담당 팀 이관, 근거 부족은 미확인 표시로 구분.
 
 ## 3단계: 모델 기준선과 Agent runtime
 
@@ -32,14 +39,14 @@
 
 ## 4단계: synthetic 지식 corpus와 RAG
 
-- source metadata/버전이 포함된 VPN·계정·메일 가이드 작성.
+- source metadata/버전이 포함된 업무 지표 정의·조회 조건·직원 조치·전문 이관 가이드 작성.
 - 문서 분할, embedding 생성, index version을 재현 가능한 ingestion command로 구현.
 - 검색 도구는 top-k 구절·source ID·score를 반환하고 답변에 출처 노출.
 - 완료 기준: gold source 평가, 검색 0건 fallback, 문서 prompt injection 테스트.
 
 ## 5단계: Agent 도구와 승인 경계
 
-- Python AI Service는 읽기 전용 지식 검색과 초안 생성만 수행하고, Spring이 승인 후 티켓 API를 실행.
+- Python AI Service는 읽기 전용 문서/업무 조사와 초안 생성을 수행하고, Spring이 승인 후 티켓 API를 실행.
 - 사용자 검토 가능한 ticket draft, 서버 검증 approval ID, idempotency key 구현.
 - Spring TicketService를 PostgreSQL에 연결하고 상태 전이와 변경 이력을 추가.
 - 완료 기준: 승인 없는 쓰기 0건, 반복 호출 중복 0건, 담당자 상태 변경 확인.

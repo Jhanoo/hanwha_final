@@ -69,3 +69,7 @@ LIMIT $3;
 7. compose volume에 실제 persistent data가 남는지 컨테이너 재생성으로 확인.
 
 로컬 Docker PostgreSQL 17에서 migration과 pgvector 확장을 적용했다. API의 health/chat/ticket 생성·조회·상태 변경, 멱등 재시도, pgvector cosine distance를 smoke 검증했다. 기존 SQLite에는 티켓이 0건이었다. 브라우저 UI 전체 흐름, embedding ingestion/retrieval, LLM 호출은 아직 구현·검증하지 않았다.
+
+## 조사 대상 업무 DB와의 경계
+
+DeskMate 저장 DB는 상담·티켓·지식 인덱스용이며 조사 대상 업무 DB와 별개다. 업무 DB의 합성 매출 데이터는 fixture로 별도 준비한다. Spring 진단 Gateway는 업무 DB의 읽기 전용 계정·허용 query ID로만 접근하고 Python Agent에 직접 업무 DB credential을 제공하지 않는다. 현재 연결은 미구현이다.

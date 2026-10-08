@@ -30,6 +30,9 @@ flowchart TB
         AI -. 모델 API .-> LLM[호스팅 LLM API 후보]
         AI -. embedding API .-> EMB[Embedding API 후보]
         EMB -. vector 생성 .-> VDB
+        AI -. 읽기 도구 요청 .-> GATE[Spring 진단 Gateway]
+        GATE -. 허용된 조회 .-> BUSINESS[업무 DB · 로그 · 배포 코드]
+        GATE -. 소유권 확인 .-> OWN[서비스 소유 팀 registry]
     end
 ```
 
@@ -38,14 +41,18 @@ flowchart TB
 | 구성 | 책임 | 권한 경계 |
 |---|---|---|
 | Web UI | 직원 상담, 근거 확인, 티켓 초안 검토·승인, 담당자 보드 | 브라우저 입력은 신뢰하지 않음 |
-| Spring Boot | 인증·인가, 대화/요청 관리, AI 호출, 티켓·승인·상태·담당자 업무 규칙, PostgreSQL 관계 데이터 | 티켓 쓰기와 최종 권한 판단의 유일한 소유자 |
-| Python AI Service | OpenAI Agents SDK 기반 상담, 추가 질문, 요약·분류, RAG 검색, 근거와 티켓 초안 반환, embedding ingestion | 티켓 쓰기·사용자 권한 결정 권한 없음 |
+| Spring Boot | 인증·인가, 대화/요청 관리, AI 호출, 읽기 전용 진단 Gateway, 티켓·승인·상태·담당자 업무 규칙, PostgreSQL 관계 데이터 | 티켓 쓰기와 최종 권한 판단의 유일한 소유자 |
+| Python AI Service | OpenAI Agents SDK 기반 상담·조사 계획, RAG와 읽기 도구 선택, 사실/원인 후보·티켓 초안 반환, embedding ingestion | 티켓 쓰기·사용자 권한 결정 권한 없음 |
 | PostgreSQL + pgvector | Spring 소유의 상담·승인·티켓 데이터와 Python AI 소유의 지식 문서·벡터 | 서비스별 최소 권한 DB role을 분리하는 목표 |
 | 외부 모델 API | 생성 및 embedding 계산 | 필요한 최소 입력만 전송하고 민감 정보는 사전 제거·정책 적용 |
 
 첫 데모는 한 PostgreSQL 인스턴스를 공유하되 테이블 소유권과 DB role을 분리한다. Spring은 상담·승인·티켓 테이블을 읽고 쓴다. Python은 지식 테이블을 검색하고 ingestion 계정으로만 적재한다. Python에는 ticket 테이블 쓰기 권한을 부여하지 않는다. 스키마 변경은 버전 관리 migration으로 적용하고, 어느 서비스가 migration을 소유할지는 구현 단계에서 확정한다.
 
 AI 서비스에 보내는 사용자 문맥은 필요한 최근 대화, 요청 ID, 검색 범위 등으로 제한한다. 인증 주체와 허용 지식 범위는 Spring이 결정해 전달하며, Python은 클라이언트가 보낸 임의의 role·승인 여부를 권한 근거로 사용하지 않는다. 모델 출력은 제안이며 Spring에서 schema와 정책을 검증한다.
+
+## 시스템 진단 확장
+
+직원 문의를 조사해 직접 해결 가능한 조치를 안내하거나 전문 팀으로 연결한다. 조사 대상 업무 DB는 DeskMate 저장 DB와 별개다. Python은 업무 시스템에 직접 접속하지 않고 Spring 진단 Gateway를 통해 등록된 읽기 도구를 호출한다. 서비스 소유 팀 registry로 배정 후보를 찾고 Git 작성 이력을 담당자 정답으로 사용하지 않는다. [상세 시나리오·도구·데이터 계약](investigation-design.md)을 따른다.
 
 ## 상담 API 계약 초안
 
@@ -73,6 +80,7 @@ sequenceDiagram
     participant S as Spring Boot API
     participant A as Python AI Service
     participant DB as PostgreSQL + pgvector
+    participant SYS as 조사 대상 업무 시스템
     participant L as LLM / Embedding API
     actor O as IT 담당자
 
@@ -81,9 +89,14 @@ sequenceDiagram
     S->>DB: 사용자·대화 권한 검증 및 입력 저장
     S->>A: POST /internal/v1/assist (최소 문맥, request_id)
     A->>DB: 허용 범위 내 지식 검색
+    A->>S: 허용된 DB·로그·코드 조회 요청
+    S->>SYS: 권한·입력·예산 검증 후 읽기 조회
+    SYS-->>S: 관측값·snapshot·배포 버전 또는 오류
+    S-->>A: 마스킹된 조사 근거
     A->>L: 근거를 포함한 생성 요청
     L-->>A: 응답 또는 추가 질문
     A-->>S: answer + citations + ticket_draft 제안
+    Note over A,S: 사실·원인 후보·미확인 항목을 구분하고 현재 소유 팀을 확인
     S->>S: 응답 검증·정책 확인
     S-->>UI: 상담 답변과 출처
 
@@ -114,12 +127,14 @@ AI 응답이 timeout 또는 오류이면 Spring은 실패를 분명히 반환하
 - Python: AI 전용 서비스. OpenAI Agents SDK 후보와 RAG·평가 도구를 사용하되 SDK·버전은 구현 시 확정한다.
 - LLM 후보: `gpt-4.1-mini`; 계정·지역별 가용성·가격·도구 호출을 확인하기 전 미확정.
 - Embedding 후보: `text-embedding-3-small`, 1536 dimensions; 한국어 검색 평가 후 확정.
-- AI Agent의 Python tool은 지식 검색 같은 읽기 기능으로 제한하고 티켓 쓰기는 Spring에서 승인 후 실행한다.
+- AI Agent의 tool은 지식 검색과 Spring Gateway의 허용된 DB·로그·코드·소유 팀 조회로 제한한다. 티켓 쓰기는 Spring에서 승인 후 실행한다.
 - PostgreSQL + pgvector: 티켓 저장은 현재 사용 중, 지식 검색은 schema만 준비되어 있고 구현 전.
 - 인증, 내부 서비스 인증, 지식 권한 범위, 실제 담당자 목록·배정 정책, 티켓 필드, migration 소유권, API schema 및 timeout은 미결정.
 - 현재 Python 웹 서버의 기능을 Spring으로 옮긴 뒤 구형 `/api/*` 서버를 유지할지 종료할지 정한다. 장기적으로 두 서버가 같은 UI 요청을 동시에 처리하지 않도록 한다.
 
 이 혼합 구성 제안의 대안과 결과는 [ADR 0001](adr/0001-spring-python-ai-service.md)에 기록했다.
+
+읽기 조사와 현재 소유 팀 연결 결정은 [ADR 0002](adr/0002-readonly-investigation-and-ownership.md)를 따른다.
 
 ## 단계별 구현 순서
 
@@ -128,7 +143,8 @@ AI 응답이 timeout 또는 오류이면 Spring은 실패를 분명히 반환하
 3. Python AI Service의 health 및 `/internal/v1/assist` mock 응답을 구성하고 Spring 간 통신을 확인한다.
 4. 승인된 synthetic 문서 ingestion과 pgvector 검색을 Python에서 구현한다.
 5. 호스팅 LLM과 Agents SDK를 연결하고 출처가 포함된 응답·티켓 초안을 반환한다.
-6. Spring에서 승인 경계, 멱등 티켓 생성, 담당자 할당·상태 변경을 구현한다.
-7. 정상·추가 질문·검색 실패·AI timeout·미승인·중복·할당 실패를 평가하고 데모를 통합한다.
+6. Spring 진단 Gateway와 가상 업무 시스템 fixture를 연결해 DB·로그·배포 코드 근거를 확인한다.
+7. Spring에서 승인 경계, 멱등 티켓 생성, 담당자 할당·상태 변경을 구현한다.
+8. 정상·추가 질문·검색 실패·AI timeout·미승인·중복·할당 실패를 평가하고 데모를 통합한다.
 
 튜닝은 기준선 평가에서 반복 오류가 확인된 뒤 별도 판단한다. 현재 구현 상태와 데이터 후보 조사 결과는 [LLM 선택과 데이터 전략](llm-strategy.md), [데이터 후보 정리](../데이터%20후보/README.md), [목표 업무 플로우](../설계/플로우차트_및_아키텍처.md)를 참고한다.
