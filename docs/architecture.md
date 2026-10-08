@@ -1,5 +1,31 @@
 # DeskMate AI Agent 아키텍처 초안
 
+## 구성도
+
+초록 실선은 현재 코드에서 동작하는 흐름이고, 주황 점선은 아직 구현하지 않은 목표 흐름이다. 보라색 노드는 외부 모델 API 후보를 나타낸다.
+
+![DeskMate 현재 구현과 목표 AI 구성도](architecture.png)
+
+```mermaid
+flowchart LR
+    subgraph now[현재 구현]
+        E[직원 / IT 담당자] --> UI[정적 Web UI]
+        UI --> API[Python HTTP API<br/>server.py]
+        API --> RULE[키워드 규칙 상담<br/>/api/chat]
+        API --> PG[(PostgreSQL<br/>tickets · ticket_events)]
+    end
+    subgraph target[계획 기능]
+        API -. 상담 입력 .-> AGENT[IT Support Agent<br/>OpenAI Agents SDK]
+        AGENT -. 추론 .-> LLM[호스팅 LLM API 후보]
+        AGENT -. 검색 도구 .-> RAG[Knowledge Retriever]
+        DOC[승인된 / synthetic IT 문서] -. ingestion .-> EMB[Embedding API 후보]
+        EMB -. vector 적재 .-> VDB[(pgvector<br/>knowledge_chunks)]
+        RAG -. 근거 검색 .-> VDB
+        AGENT -. 승인된 쓰기 .-> ADAPTER[TicketAdapter + 승인 경계]
+        ADAPTER -. 티켓 CRUD .-> PG
+    end
+```
+
 ## 기준선과 목표
 
 **현재 구현:** Python HTTP 서버, 정적 웹 UI, 키워드 기반 `diagnose`, PostgreSQL + pgvector schema와 ticket API. 외부 LLM·embedding ingestion·RAG·인증은 없다.
@@ -15,10 +41,10 @@
 - **IT Support Agent:** 증상 분류, 추가 질문, 검색·요약 도구 선택. 승인 전에 쓰기 도구 실행 불가.
 - **Knowledge Retriever:** 문서 ingestion, chunk metadata, embedding 검색, top-k 출처 반환. 검색 결과는 신뢰하지 않는 참고 데이터.
 - **TicketAdapter:** 승인된 ticket create, list/get, update status를 명확한 입력 schema와 멱등 키로 수행.
-- **PostgreSQL + pgvector (목표 demo):** 티켓, 상담, 승인, 지식 chunk와 embedding을 저장. DB migration 및 pgvector 확장 활성화가 필요하다. 현재 SQLite 데이터는 migration 검증 전에 보존한다.
+- **PostgreSQL + pgvector:** 티켓 API는 PostgreSQL에 연결되어 있다. `knowledge_documents`와 `knowledge_chunks`의 pgvector schema도 migration에 있지만 ingestion과 검색은 미구현이다. 기존 SQLite 데이터는 import 원본으로 보존한다.
 - **Evaluation harness:** 버전 고정 사례를 같은 retriever·agent·tools에 공급하고 결과와 trace를 산출.
 
-## 요청 흐름
+## 계획된 AI 요청 흐름
 
 ```mermaid
 sequenceDiagram
@@ -75,9 +101,9 @@ trace에 request/conversation ID, 단계, 도구 이름, 시간, 성공/오류 �
 ## 기술 선택과 미결정 사항
 
 - 유지: Python, uv, 정적 JS UI.
-- DB 변경: SQLite에서 PostgreSQL + pgvector로 전환하는 것이 AI 기술 시연 MVP의 목표다. Docker Compose로 로컬 서비스를 준비한다.
+- DB: 티켓 저장은 PostgreSQL로 전환 완료. pgvector 지식 검색은 schema만 준비되어 있고 실제 ingestion·검색 구현이 남아 있다.
 - AI orchestration 후보: OpenAI Agents SDK. 실제 dependency 추가와 API 인증은 별도 작업으로 설정한다.
 - Embedding: 초기 기준 후보는 OpenAI `text-embedding-3-small`(1536 dimensions). 실제 API 접근 후 비용·한국어 검색 품질을 검증하고 확정한다.
 - retrieval: pgvector cosine 검색과 metadata 필터부터 구현한다. hybrid/재순위화는 평가 결과 후 결정한다.
 - 실제 Jira/ServiceNow는 이번 MVP 밖이다. `TicketAdapter` 뒤에 외부 구현을 추가할 수 있도록 분리한다.
-- 현재 데모 DB에 대화·출처·승인 이력이 없으므로 요구사항·마이그레이션을 확정한 뒤 별도 변경한다.
+- 대화·출처·승인 테이블은 schema에 정의되어 있으나 현재 상담 API와 연결되지 않았다.

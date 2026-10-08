@@ -44,3 +44,9 @@ PRD, 요구사항 명세, 아키텍처, DB 설계·생성, API 명세, AI 평가
 AI Agent MVP의 목표는 PostgreSQL 17 + pgvector 기반 RAG입니다. 티켓 API는 PostgreSQL로 전환했으며 RAG와 실제 LLM 호출은 아직 구현하지 않았습니다. 아키텍처·DB schema·migration은 [DB 설계서](docs/database.md), [초기 migration SQL](db/migrations/001_initial_schema.sql), [구현 계획](docs/implementation-plan.md)을 확인하세요. `.env`의 비밀번호를 변경한 뒤 migration을 실행하고 서버를 시작합니다. 로컬 PostgreSQL은 `docker compose down`으로 멈출 수 있으며 데이터 보존 볼륨을 삭제하는 `down -v`는 사용하지 마세요.
 
 LLM 선택과 학습 데이터의 현실성은 [LLM 선택과 데이터 전략](docs/llm-strategy.md)에 기록되어 있습니다.
+
+## 아키텍처
+
+현재 구현과 계획 중인 Agent·RAG 흐름을 구분한 [아키텍처 문서](docs/architecture.md)와 구성도입니다.
+
+![DeskMate 현재 구현과 목표 AI 구성도](docs/architecture.png)
