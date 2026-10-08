@@ -4,11 +4,13 @@
 
 ## 실행
 
-Python 3.12 이상만 필요합니다. 외부 패키지 설치와 API 키는 필요 없습니다.
+Python 3.12 이상과 uv를 사용합니다. 외부 Python 패키지와 API 키는 필요 없습니다.
 
 ```bash
 cd /workspace/hanwha_final
-python3 server.py
+UV_CACHE_DIR=/workspace/.cache/uv uv venv --python python3 .venv
+source .venv/bin/activate
+python server.py
 ```
 
 브라우저에서 실행 머신의 8000번 포트로 접속합니다. 기본 바인딩은 `127.0.0.1`입니다. `PORT` 환경 변수로 포트를 변경할 수 있습니다.
