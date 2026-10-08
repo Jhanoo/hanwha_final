@@ -36,3 +36,5 @@ OpenAI Developers와 Plugin Eval의 프로젝트 전용 설치 설정을 제공�
 ## 프로젝트 진행 스킬
 
 PRD, 요구사항 명세, 아키텍처, DB 설계·생성, API 명세, AI 평가, 테스트·배포용 스킬과 템플릿은 [.agents/skills/README.md](.agents/skills/README.md)에 정리되어 있습니다. Codex에 원하는 작업을 요청하면 `AGENTS.md`의 단계별 지침에 따라 필요한 스킬을 사용합니다. 스킬 추가 자체로 제품 문서나 실제 DB가 생성되는 것은 아닙니다.
+
+AI Agent MVP 목표는 PostgreSQL 17 + pgvector 기반 RAG입니다. 현재 실행 코드는 SQLite를 사용하며 전환 전 설계 상태입니다. 아키텍처·스키마 초안은 [DB 설계서](docs/database.md), [초기 migration SQL](db/migrations/001_initial_schema.sql), [구현 계획](docs/implementation-plan.md)을 확인하세요.

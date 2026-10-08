@@ -9,7 +9,7 @@ description: 시스템 설계, 기술 선택, ADR, 기능별 구현 계획을 �
 
 ## 작업 순서
 
-1. 요구사항과 기존 구조를 읽는다. 현재 Python 표준 라이브러리·SQLite·정적 UI 구조를 기준선으로 삼는다.
+1. 요구사항과 기존 구조를 읽는다. 현재 SQLite를 기준선으로 삼고 목표 MVP DB는 PostgreSQL + pgvector로 설계한다.
 2. `docs/architecture.md`에 UI, 상담 Agent, 지식 검색, TicketAdapter, DB, 외부 서비스의 책임과 경계를 적는다.
 3. Mermaid로 요청 및 데이터 흐름을 표현하고, 로컬 데모와 계획된 운영 구조를 분리한다.
 4. LLM과 규칙 모드, 로컬 티켓과 외부 티켓의 인터페이스를 정한다. 외부 장애 시 오류, 재시도, 중복 방지 방침을 적는다.

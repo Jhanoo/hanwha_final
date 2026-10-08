@@ -9,7 +9,7 @@ description: ERD, 데이터 사전, SQLite 또는 PostgreSQL 스키마, DB 생�
 
 ## 작업 순서
 
-1. 대상 DB 엔진과 기존 스키마·데이터·요구사항을 확인한다. 기본값은 현재 SQLite이며 임의로 PostgreSQL로 바꾸지 않는다.
+1. 목표 시연 DB는 PostgreSQL + pgvector다. 현재 앱이 SQLite라는 기준선을 보존하고 `docs/database.md`의 설계·migration 상태를 확인한다.
 2. `docs/database.md`에 Mermaid ERD, 테이블·컬럼·키·관계·제약·인덱스·삭제 정책·시간대·보존 정책을 적는다.
 3. 직원, 대화, 티켓, 티켓 이벤트, 지식 문서는 요구사항에 필요한 것만 설계한다. 스키마와 API의 ID·상태 타입을 맞춘다.
 4. 생성 SQL과 버전 순서가 명확한 마이그레이션을 `db/`에 작성한다. 적용 이력, 재실행 정책, 데이터 전환 및 실패 시 복구를 정의한다.
