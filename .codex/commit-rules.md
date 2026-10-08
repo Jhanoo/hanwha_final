@@ -15,7 +15,7 @@
 
 ## 예시
 
-feat: 안테나 로그 API에 날짜 필터를 추가하라
+feat: 안테나 로그 API에 날짜 필터 추가
 
 - API 및 Repository 쿼리에 날짜 필터 반영
 - Service와 Controller에 날짜 파라미터 추가
