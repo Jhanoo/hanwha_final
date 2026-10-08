@@ -2,12 +2,12 @@
 
 ## 결론
 
-**MVP는 OpenAI API의 `gpt-4.1-mini`를 첫 후보로 두고, PostgreSQL + pgvector RAG와 OpenAI Agents SDK tool calling을 붙인다. fine-tuning은 지금 하지 않는다.** 이 모델은 시작 후보이지 계정·지역에서의 제공 여부, 가격, 최신 추천 모델을 확인하기 전 확정된 운영 선택은 아니다. 구현 시 `OPENAI_MODEL` 설정으로 교체 가능하게 둔다.
+**목표 구성은 Spring Boot 제품 백엔드 + Python AI Service다. Python 서비스에서 OpenAI Agents SDK와 호스팅 LLM API를 사용하고 PostgreSQL + pgvector로 RAG를 구현한다.** `gpt-4.1-mini`는 첫 API 후보지만 계정·지역별 제공 여부, 가격, 최신 모델을 확인하기 전 미확정이다. Fine-tuning은 기준선과 오류 분석 전에는 하지 않는다.
 
 - IT 해결 정보는 모델 파라미터보다 승인된 최신 가이드에 있어야 한다. 이를 RAG의 출처·인용으로 보여 주는 것이 주제에 더 직접적이다.
 - MVP의 주된 AI 가치는 다중 턴 증상 파악, 근거 검색, tool 선택과 승인 경계다. SDK의 tool schema·서버 검증·trace로 시연한다.
 - 한 모델만 보면 선택 근거가 약해지므로, API와 인증이 준비되면 더 작은/큰 사용 가능 모델을 같은 평가셋에서 비교한다. 외부 API 접근 전에는 소요 비용이나 성능을 단정하지 않는다.
-- 현재 앱은 규칙 기반이며, 실제 모델 호출은 미구현이다. 이번 문서는 선택안이며 모델을 설치·호출하거나 API key를 설정한 것은 아니다.
+- 현재 앱은 Python 규칙 기반 단일 서버이며, Spring 백엔드 이관과 Python AI Service 분리, 실제 모델 호출은 미구현이다. 이번 문서는 목표 설계이며 모델을 설치·호출하거나 API key를 설정한 것은 아니다.
 
 ## 모델 방식 비교
 

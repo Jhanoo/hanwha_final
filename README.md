@@ -29,7 +29,7 @@ uv run python server.py
 
 ## 구현 범위와 확장
 
-현재 상담은 키워드 기반 규칙 데모이며 실제 LLM을 호출하지 않습니다. VPN·계정·메일·프린터 가이드를 제공합니다. 티켓은 PostgreSQL에 저장하며 Docker Compose 서비스가 필요합니다. 기존 SQLite 데이터는 `scripts/import_sqlite_tickets.py`로 가져오고 원본 `.local/tickets.db`는 변경하지 않습니다. `/api/chat`, `/api/tickets`, `/api/tickets/{id}`가 UI와 시스템을 연결합니다. Jira/ServiceNow를 연결하려면 티켓 저장 부분을 해당 API 어댑터로 교체하고, LLM 도입 시 `diagnose`를 사내 지식 검색과 모델 호출로 확장합니다.
+현재 상담은 키워드 기반 규칙 데모이며 실제 LLM을 호출하지 않습니다. VPN·계정·메일·프린터 가이드를 제공합니다. 티켓은 PostgreSQL에 저장하며 Docker Compose 서비스가 필요합니다. 기존 SQLite 데이터는 `scripts/import_sqlite_tickets.py`로 가져오고 원본 `.local/tickets.db`는 변경하지 않습니다. `/api/chat`, `/api/tickets`, `/api/tickets/{id}`가 UI와 시스템을 연결합니다. 목표 설계는 Spring Boot 제품 백엔드와 Python AI Service를 분리합니다. [아키텍처 문서](docs/architecture.md)와 [상세 설계](설계/플로우차트_및_아키텍처.md)를 참고하세요.
 
 인증과 사용자별 접근 제어는 구현되지 않았습니다. 로컬 발표용으로 사용하고 사내 운영 전에는 인증, 권한, 감사 로그, 개인정보 처리와 입력 보호를 추가해야 합니다. 외부 폰트를 불러오지 못해도 기본 글꼴로 동작합니다.
 

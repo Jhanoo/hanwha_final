@@ -1,109 +1,130 @@
-# DeskMate AI Agent 아키텍처 초안
+# DeskMate 목표 아키텍처
 
-## 구성도
+## 설계 방향
 
-초록 실선은 현재 코드에서 동작하는 흐름이고, 주황 점선은 아직 구현하지 않은 목표 흐름이다. 보라색 노드는 외부 모델 API 후보를 나타낸다.
+현재 앱은 Python HTTP 서버, 정적 웹 UI, 규칙 기반 상담, PostgreSQL 티켓 저장으로 동작한다. 목표는 **Spring Boot를 제품 백엔드로 두고 Python 서비스를 AI 전용 런타임으로 분리**하는 혼합 구성이다. 이 문서는 설계안이며, Spring 이관·LLM·RAG는 아직 구현되지 않았다.
 
-![DeskMate 현재 구현과 목표 AI 구성도](architecture.png)
+![DeskMate 현재 구현과 Spring·Python 목표 아키텍처](architecture.png)
+
+초록 실선은 현재 구현, 파란 점선은 계획된 서비스 흐름, 주황 점선은 데이터 적재 경로다.
 
 ```mermaid
-flowchart LR
-    subgraph now[현재 구현]
+flowchart TB
+    subgraph current[현재 구현]
         E[직원 / IT 담당자] --> UI[정적 Web UI]
-        UI --> API[Python HTTP API<br/>server.py]
-        API --> RULE[키워드 규칙 상담<br/>/api/chat]
-        API --> PG[(PostgreSQL<br/>tickets · ticket_events)]
+        UI --> PYAPI[Python HTTP API<br/>server.py]
+        PYAPI --> RULE[키워드 규칙 상담]
+        PYAPI --> PG[(PostgreSQL<br/>티켓 CRUD)]
     end
-    subgraph target[계획 기능]
-        API -. 상담 입력 .-> AGENT[IT Support Agent<br/>OpenAI Agents SDK]
-        AGENT -. 추론 .-> LLM[호스팅 LLM API 후보]
-        AGENT -. 검색 도구 .-> RAG[Knowledge Retriever]
-        DOC[승인된 / synthetic IT 문서] -. ingestion .-> EMB[Embedding API 후보]
-        EMB -. vector 적재 .-> VDB[(pgvector<br/>knowledge_chunks)]
-        RAG -. 근거 검색 .-> VDB
-        AGENT -. 승인된 쓰기 .-> ADAPTER[TicketAdapter + 승인 경계]
-        ADAPTER -. 티켓 CRUD .-> PG
+
+    subgraph target[목표 구성]
+        UI -. HTTP JSON .-> SPRING[Spring Boot API<br/>인증 · 상담 · 티켓 · 승인]
+        SPRING -. 내부 HTTP JSON .-> AI[Python AI Service<br/>Agents SDK · LLM · RAG]
+        AI -. 벡터 검색 · 지식 적재 .-> VDB[(PostgreSQL + pgvector<br/>지식 문서와 chunk)]
+        SPRING -. 관계형 저장 .-> DB[(PostgreSQL<br/>상담 · 티켓 · 승인 · 이력)]
+        DOC[승인된 / synthetic IT 문서] -. ingestion .-> AI
+        AI -. 모델 API .-> LLM[호스팅 LLM API 후보]
+        AI -. embedding API .-> EMB[Embedding API 후보]
+        EMB -. vector 생성 .-> VDB
     end
 ```
 
-## 기준선과 목표
+## 서비스 책임과 경계
 
-**현재 구현:** Python HTTP 서버, 정적 웹 UI, 키워드 기반 `diagnose`, PostgreSQL + pgvector schema와 ticket API. 외부 LLM·embedding ingestion·RAG·인증은 없다.
+| 구성 | 책임 | 권한 경계 |
+|---|---|---|
+| Web UI | 직원 상담, 근거 확인, 티켓 초안 검토·승인, 담당자 보드 | 브라우저 입력은 신뢰하지 않음 |
+| Spring Boot | 인증·인가, 대화/요청 관리, AI 호출, 티켓·승인·상태·담당자 업무 규칙, PostgreSQL 관계 데이터 | 티켓 쓰기와 최종 권한 판단의 유일한 소유자 |
+| Python AI Service | OpenAI Agents SDK 기반 상담, 추가 질문, 요약·분류, RAG 검색, 근거와 티켓 초안 반환, embedding ingestion | 티켓 쓰기·사용자 권한 결정 권한 없음 |
+| PostgreSQL + pgvector | Spring 소유의 상담·승인·티켓 데이터와 Python AI 소유의 지식 문서·벡터 | 서비스별 최소 권한 DB role을 분리하는 목표 |
+| 외부 모델 API | 생성 및 embedding 계산 | 필요한 최소 입력만 전송하고 민감 정보는 사전 제거·정책 적용 |
 
-**목표 시연 구조:** Python 웹 서버를 유지하며 상담 API에 OpenAI Agents SDK 단일 Agent를 추가한다. synthetic 지식 문서를 임베딩해 PostgreSQL + pgvector에서 검색하고, 명시적 schema가 있는 함수 도구를 호출한다. 티켓·대화·승인·지식 chunk를 PostgreSQL에 저장한다.
+첫 데모는 한 PostgreSQL 인스턴스를 공유하되 테이블 소유권과 DB role을 분리한다. Spring은 상담·승인·티켓 테이블을 읽고 쓴다. Python은 지식 테이블을 검색하고 ingestion 계정으로만 적재한다. Python에는 ticket 테이블 쓰기 권한을 부여하지 않는다. 스키마 변경은 버전 관리 migration으로 적용하고, 어느 서비스가 migration을 소유할지는 구현 단계에서 확정한다.
 
-실제 LLM 모델과 embedding 모델은 설정 가능하게 두고, API key는 환경에서 읽는다. 실제 모델 이름·비용은 계정 접근 후 선택하며 여기서 가짜로 확정하지 않는다.
+AI 서비스에 보내는 사용자 문맥은 필요한 최근 대화, 요청 ID, 검색 범위 등으로 제한한다. 인증 주체와 허용 지식 범위는 Spring이 결정해 전달하며, Python은 클라이언트가 보낸 임의의 role·승인 여부를 권한 근거로 사용하지 않는다. 모델 출력은 제안이며 Spring에서 schema와 정책을 검증한다.
 
-## 구성과 책임
+## 상담 API 계약 초안
 
-- **Web UI:** 대화, 인용 출처, 상담 요약 편집, 명시적 티켓 승인, 담당자 보드.
-- **Conversation API:** 입력 검증, 세션/요청 ID, Agent 호출과 응답 구조화.
-- **IT Support Agent:** 증상 분류, 추가 질문, 검색·요약 도구 선택. 승인 전에 쓰기 도구 실행 불가.
-- **Knowledge Retriever:** 문서 ingestion, chunk metadata, embedding 검색, top-k 출처 반환. 검색 결과는 신뢰하지 않는 참고 데이터.
-- **TicketAdapter:** 승인된 ticket create, list/get, update status를 명확한 입력 schema와 멱등 키로 수행.
-- **PostgreSQL + pgvector:** 티켓 API는 PostgreSQL에 연결되어 있다. `knowledge_documents`와 `knowledge_chunks`의 pgvector schema도 migration에 있지만 ingestion과 검색은 미구현이다. 기존 SQLite 데이터는 import 원본으로 보존한다.
-- **Evaluation harness:** 버전 고정 사례를 같은 retriever·agent·tools에 공급하고 결과와 trace를 산출.
+Spring에서 Python으로 보내는 내부 요청은 `POST /internal/v1/assist`를 제안한다. 외부 공개 API는 Spring만 제공한다.
 
-## 계획된 AI 요청 흐름
+| 필드 | 방향 | 설명 |
+|---|---|---|
+| `request_id` | Spring → Python | 추적·중복 관찰을 위한 UUID |
+| `conversation_id` | Spring → Python | 대화 상관관계 ID; Python은 영속 대화 저장소로 취급하지 않음 |
+| `messages` | Spring → Python | 필요한 범위의 최근 상담 내용만 전달 |
+| `knowledge_scope` | Spring → Python | 서버가 계산한 검색 허용 범위 |
+| `answer` | Python → Spring | 사용자에게 보여 줄 응답 |
+| `citations` | Python → Spring | 출처 ID·문서 버전·근거 구절 목록 |
+| `ticket_draft` | Python → Spring | 제목·분류·사실 기반 요약 등 제안; 확정 티켓이 아님 |
+| `needs_more_info` | Python → Spring | 추가 질문 필요 여부와 빠진 정보 목록 |
+
+JSON schema, 최대 입력 크기, timeout, 인증 방식, 오류 code는 API 계약 단계에서 확정한다. 모델 응답 원문이나 chain-of-thought는 계약에 포함하지 않는다. 내부 통신 인증과 TLS는 배포 환경에 맞게 구현한다.
+
+## 요청 흐름
 
 ```mermaid
 sequenceDiagram
     actor E as 직원
     participant UI as Web UI
-    participant API as Conversation API
-    participant A as IT Support Agent
-    participant R as Knowledge Retriever
-    participant T as TicketAdapter(PostgreSQL)
-    actor H as IT 담당자
+    participant S as Spring Boot API
+    participant A as Python AI Service
+    participant DB as PostgreSQL + pgvector
+    participant L as LLM / Embedding API
+    actor O as IT 담당자
 
-    E->>UI: 장애 증상
-    UI->>API: 메시지와 conversation_id
-    API->>A: 검증된 대화 입력
-    A->>R: 증상 질의 검색
-    R-->>A: top-k 근거 구절과 source_id
-    A-->>UI: 확인 질문 또는 출처가 붙은 조치
-    E->>UI: 조치 결과 미해결
-    UI->>API: 상담 요약 요청
-    API->>A: 티켓 초안 도구
-    A-->>UI: 편집 가능한 티켓 요약
-    E->>UI: 명시적 접수 승인
-    UI->>API: 승인 토큰 + idempotency_key
-    API->>T: 승인 검증 후 티켓 생성
-    T-->>UI: ticket_id와 상태
-    H->>T: 상태 변경
-    UI->>T: 티켓 상태 조회
+    E->>UI: 장애 문의
+    UI->>S: POST /api/chat
+    S->>DB: 사용자·대화 권한 검증 및 입력 저장
+    S->>A: POST /internal/v1/assist (최소 문맥, request_id)
+    A->>DB: 허용 범위 내 지식 검색
+    A->>L: 근거를 포함한 생성 요청
+    L-->>A: 응답 또는 추가 질문
+    A-->>S: answer + citations + ticket_draft 제안
+    S->>S: 응답 검증·정책 확인
+    S-->>UI: 상담 답변과 출처
+
+    E->>UI: 티켓 초안 확인 후 승인
+    UI->>S: 승인 ID + draft hash + idempotency key
+    S->>S: 승인·권한·중복 검증
+    S->>DB: 티켓 생성 및 상태 이력 저장
+    DB-->>S: ticket_id와 상태
+    S-->>UI: 확정된 접수 결과
+    O->>S: 배정 및 상태 변경
+    S->>DB: 담당자·상태·이력 저장
 ```
 
-## 도구 경계와 오류
+AI 응답이 timeout 또는 오류이면 Spring은 실패를 분명히 반환하고 티켓을 생성하지 않는다. 재시도는 읽기/생성 응답에 한정하고 제한 횟수와 요청 ID를 기록한다. 티켓 생성은 Spring만 수행하며 idempotency key로 중복을 막는다. 티켓 생성 또는 담당자 배정 결과가 불명확하면 상태를 조회해 확인하고, 성공을 추정해 재생성하지 않는다.
 
-| 도구 | 권한 | 입력 | 부작용 | 실패 동작 |
-| --- | --- | --- | --- | --- |
-| `search_it_knowledge` | 읽기 | query, category | 없음 | 빈 결과·검색 오류를 구분해 반환 |
-| `summarize_incident` | 읽기/변환 | 검증된 대화 요약 | 없음 | schema 검증 후 재요청 또는 fallback |
-| `create_ticket` | 쓰기 | user-approved draft, approval ID, idempotency key | 티켓 생성 | 중복 key면 기존 ID, 오류면 상담 초안 유지 |
-| `get_ticket` | 읽기 | ticket ID | 없음 | 미존재·권한 오류 구분 |
-| `update_ticket_status` | 쓰기 | ticket ID, 허용 상태 | 상태/이력 변경 | 허용 전이 검증 후 명확한 오류 반환 |
+## 데이터 소유권과 배포
 
-Agents SDK의 모델 trace와 사용자에게 노출할 상담 기록은 분리한다. 인증 값, 불필요한 원문 개인 정보, chain-of-thought를 저장·출력하지 않는다. 사용자가 승인하기 전 ticket write 도구는 Agent에 노출하지 않거나 서버가 호출을 거부한다. UI 승인 boolean만 믿지 않고 서버 발급 승인 ID와 대화 draft hash를 확인한다.
+- **Spring 소유 데이터:** conversations, messages, approvals, tickets, ticket_events 및 향후 담당자 할당 데이터.
+- **Python AI 소유 데이터:** knowledge_documents, knowledge_chunks, embedding index metadata. ticket 및 승인 테이블 쓰기는 금지.
+- **공유 인프라:** PostgreSQL + pgvector 한 인스턴스로 시작하되 사용자 계정/권한과 migration 절차를 분리한다.
+- **문서 ingestion:** 승인된 또는 synthetic 문서만 ingestion한다. 출처, 버전, 분류, 접근 범위를 metadata로 유지한다.
+- **배포 단위:** Spring API와 Python AI Service를 독립 프로세스/컨테이너로 실행한다. 데모 환경에서는 Docker Compose 구성을 목표로 한다.
+- **개발 환경:** Python은 `uv`와 `.venv`를 사용한다. Spring 빌드 도구와 버전은 팀 표준 확인 후 선택한다.
 
-## RAG와 데이터
+## 기술 후보와 미결정 사항
 
-1. synthetic Markdown 문서를 source ID·제목·분류·버전과 함께 ingestion한다.
-2. 제목/문단 경계를 살려 chunk를 만들고 source metadata를 각 chunk에 유지한다.
-3. embedding을 PostgreSQL pgvector의 `vector(1536)`에 저장하고 cosine distance top-k를 SQL로 검색한다. text-embedding-3-small은 현재 제안 설정이며 모델 차원 변경 시 schema와 index를 함께 교체한다.
-4. 응답에 문서 제목·source ID·검색 구절을 전달하고, 평가 가능한 retrieval result를 남긴다.
-5. embedding 교체 시 전체 문서를 재색인하고 index version을 기록한다. 검색 0건이면 안전 fallback한다.
+- Spring Boot: 주 제품 백엔드 후보. Java 팀 역량을 활용해 인증, 티켓, 승인, 상태와 할당 업무를 구현한다.
+- Python: AI 전용 서비스. OpenAI Agents SDK 후보와 RAG·평가 도구를 사용하되 SDK·버전은 구현 시 확정한다.
+- LLM 후보: `gpt-4.1-mini`; 계정·지역별 가용성·가격·도구 호출을 확인하기 전 미확정.
+- Embedding 후보: `text-embedding-3-small`, 1536 dimensions; 한국어 검색 평가 후 확정.
+- AI Agent의 Python tool은 지식 검색 같은 읽기 기능으로 제한하고 티켓 쓰기는 Spring에서 승인 후 실행한다.
+- PostgreSQL + pgvector: 티켓 저장은 현재 사용 중, 지식 검색은 schema만 준비되어 있고 구현 전.
+- 인증, 내부 서비스 인증, 지식 권한 범위, 실제 담당자 목록·배정 정책, 티켓 필드, migration 소유권, API schema 및 timeout은 미결정.
+- 현재 Python 웹 서버의 기능을 Spring으로 옮긴 뒤 구형 `/api/*` 서버를 유지할지 종료할지 정한다. 장기적으로 두 서버가 같은 UI 요청을 동시에 처리하지 않도록 한다.
 
-## 관측과 보안
+이 혼합 구성 제안의 대안과 결과는 [ADR 0001](adr/0001-spring-python-ai-service.md)에 기록했다.
 
-trace에 request/conversation ID, 단계, 도구 이름, 시간, 성공/오류 유형, source IDs, model/index version을 남긴다. 원문 민감 정보·API key·숨겨진 chain-of-thought는 기록하지 않는다. demo는 localhost bind를 유지하고 공개 배포에 인증 없이 노출하지 않는다.
+## 단계별 구현 순서
 
-## 기술 선택과 미결정 사항
+1. 외부/내부 API 계약과 기존 기능의 회귀 평가 사례를 고정한다.
+2. Spring API에 티켓·대화·승인 핵심 기능을 옮기고 기존 데이터와 상태 매핑을 보존한다.
+3. Python AI Service의 health 및 `/internal/v1/assist` mock 응답을 구성하고 Spring 간 통신을 확인한다.
+4. 승인된 synthetic 문서 ingestion과 pgvector 검색을 Python에서 구현한다.
+5. 호스팅 LLM과 Agents SDK를 연결하고 출처가 포함된 응답·티켓 초안을 반환한다.
+6. Spring에서 승인 경계, 멱등 티켓 생성, 담당자 할당·상태 변경을 구현한다.
+7. 정상·추가 질문·검색 실패·AI timeout·미승인·중복·할당 실패를 평가하고 데모를 통합한다.
 
-- 유지: Python, uv, 정적 JS UI.
-- DB: 티켓 저장은 PostgreSQL로 전환 완료. pgvector 지식 검색은 schema만 준비되어 있고 실제 ingestion·검색 구현이 남아 있다.
-- AI orchestration 후보: OpenAI Agents SDK. 실제 dependency 추가와 API 인증은 별도 작업으로 설정한다.
-- Embedding: 초기 기준 후보는 OpenAI `text-embedding-3-small`(1536 dimensions). 실제 API 접근 후 비용·한국어 검색 품질을 검증하고 확정한다.
-- retrieval: pgvector cosine 검색과 metadata 필터부터 구현한다. hybrid/재순위화는 평가 결과 후 결정한다.
-- 실제 Jira/ServiceNow는 이번 MVP 밖이다. `TicketAdapter` 뒤에 외부 구현을 추가할 수 있도록 분리한다.
-- 대화·출처·승인 테이블은 schema에 정의되어 있으나 현재 상담 API와 연결되지 않았다.
+튜닝은 기준선 평가에서 반복 오류가 확인된 뒤 별도 판단한다. 현재 구현 상태와 데이터 후보 조사 결과는 [LLM 선택과 데이터 전략](llm-strategy.md), [데이터 후보 정리](../데이터%20후보/README.md), [목표 업무 플로우](../설계/플로우차트_및_아키텍처.md)를 참고한다.

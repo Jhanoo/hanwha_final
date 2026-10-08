@@ -2,10 +2,10 @@
 
 ## 엔진과 적용 범위
 
-- **목표 시연 DB:** PostgreSQL 17 + pgvector 확장. Python 앱과 Docker Compose로 로컬 실행한다.
+- **목표 시연 DB:** PostgreSQL 17 + pgvector 확장. Spring Boot 업무 백엔드와 Python AI 서비스를 Docker Compose로 실행하는 혼합 구성을 설계한다.
 - **전환 상태:** 앱과 로컬 Docker PostgreSQL + pgvector 연결을 완료했다. 기존 `.local/tickets.db`는 원본으로 보존했고 legacy import 명령을 제공한다.
 - **임베딩 기준 후보:** `text-embedding-3-small`, vector(1536). 실제 모델을 변경하면 차원과 기존 index 전체 재생성을 함께 조정한다.
-- 목표 DB는 상담·티켓의 관계형 정합성과 지식 chunk 유사도 검색을 한 엔진에 모아 데모 운영을 단순하게 한다.
+- 목표 DB는 상담·티켓의 관계형 정합성과 지식 chunk 유사도 검색을 한 엔진에 모은다. Spring은 업무 테이블, Python AI는 지식 인덱스의 논리적 소유자이며 DB role을 분리한다.
 
 ## ERD
 
@@ -55,7 +55,7 @@ LIMIT $3;
 - 티켓 상태는 CHECK 제약으로 허용값을 제한하고 상태 변경은 `ticket_events`로 append한다.
 - 지식 chunk에 원문 출처와 문서 버전을 유지한다. index version을 바꿀 때 구버전이 섞이지 않도록 재색인 단위를 명시한다.
 - embeddings 자체에도 민감 문서의 의미 정보가 남을 수 있으므로 synthetic corpus만 사용한다.
-- PostgreSQL 앱 접속은 parameterized SQL과 최소 권한 계정을 사용한다. 운영 적용 시 RLS 여부를 실제 인증·테넌트 모델과 같이 설계한다. 현재 데모에서 RLS를 켰다고 주장하지 않는다.
+- PostgreSQL 접속은 parameterized SQL과 최소 권한 계정을 사용한다. Spring 계정은 상담·승인·티켓 업무 테이블, Python AI의 검색 계정은 지식 테이블 조회만 허용한다. ingestion 계정은 지식 문서 적재만 허용한다. 운영 적용 시 RLS 여부를 실제 인증·테넌트 모델과 같이 설계한다. 현재 데모에서 RLS를 켰다고 주장하지 않는다.
 - DB 비밀번호는 환경 설정으로 전달하고 compose, 문서, 로그, Git에 고정 값을 저장하지 않는다.
 
 ## 적용 계획과 검증
