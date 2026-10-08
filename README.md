@@ -4,6 +4,12 @@
 
 [페르소나·시나리오·데모 가정](docs/personas-and-demo-scenarios.md)에 직원·담당자·관리자 역할, 합성 매출 데이터, 직원 해결/담당 팀 이관 시나리오와 발표 준비 항목을 정리했습니다. 목표 시연과 현재 실행 가능한 데모를 구분합니다.
 
+## 프로젝트 완성을 위한 개발 범위
+
+만들어야 할 것은 **가상 업무 시스템, 조사 데이터·지식 자료, Spring 제품 백엔드, Spring 조사 Gateway, Python AI Service, 직원·담당자 화면, 평가·실행·발표 패키지**입니다. 업무 시스템·데이터를 먼저 준비하고 Spring 조회·티켓 흐름을 AI 없이 검증한 뒤 Python RAG·Agent와 화면을 연결합니다. 초기 모델 튜닝은 제외합니다.
+
+산출물 D-01~07의 요구사항·의존성·완료 기준은 [프로젝트 완성 로드맵](docs/implementation-plan.md)을 기준으로 확인하세요. 현재 실행 방법은 아래 기존 규칙 기반 데모에 해당하며 새 Spring·AI 구성은 아직 실행할 수 없습니다.
+
 ## 실행
 
 Python 3.12 이상, uv, Docker Compose를 사용합니다. 티켓 DB는 PostgreSQL + pgvector입니다. 규칙 기반 상담은 API 키 없이 동작합니다.

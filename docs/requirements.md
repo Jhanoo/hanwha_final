@@ -2,7 +2,7 @@
 
 ## 출처와 상태
 
-- PRD: [DeskMate PRD](prd.md), 초안 0.2
+- PRD: [DeskMate PRD](prd.md), 초안 0.3
 - 프로젝트 코드의 기존 규칙 기반 동작은 현재 구현, AI 기반 기능은 목표 요구사항으로 표기한다.
 - P0는 AI 기술 시연 MVP의 필수 범위다.
 
@@ -80,8 +80,8 @@
 ## 상태와 미결정 사항
 
 - **현재 구현:** 규칙 기반 상담, PostgreSQL 티켓 생성·조회·상태 변경, 정적 UI.
-- **미구현 목표:** OpenAI Agents SDK, 임베딩 기반 retrieval, 근거 인용, explicit approval gate, 동시 멱등성 검증, 시스템 조사·소유 팀 연결, 평가 harness.
-- **결정 필요:** 모델 이름, embedding model, 검색 chunk 크기·top-k, DB 벡터 저장 방식, UI trace 노출 범위.
+- **미구현 목표:** 가상 매출 시스템·합성 조사 자료, Spring 제품 API·권한·Gateway·승인·배정, Python LLM/임베딩 retrieval, 근거 화면·담당자 보드, 평가 harness·통합 실행 패키지.
+- **결정 필요:** 모델 이름, embedding model, 검색 chunk 크기·top-k, UI trace 노출 범위, Spring 버전·빌드 도구·내부 인증·migration 소유권. DB 검색은 PostgreSQL/pgvector이며 초기 schema는 1536차원이다.
 - **보안 제한:** 실제 사내 데이터·계정 없이 synthetic dataset으로 시작.
 
 ## 시스템 조사·담당 팀 연결 요구사항
@@ -105,3 +105,13 @@
 - FR-019: Given 권한 거부 또는 조사 예산 초과, When 처리, Then 우회 호출이나 무한 재시도를 하지 않는다.
 
 상세 도구 계약과 synthetic 수용 사례는 [시스템 진단 설계](investigation-design.md)를 따른다. 신규 요구사항은 현재 앱에 구현되지 않았다.
+
+## 구현 산출물과 수용 확인
+
+[완성 로드맵](implementation-plan.md)의 D-01~07을 기존 FR/NFR에 연결하며 별도 요구사항 번호를 중복 부여하지 않는다. [추적표](traceability.md)에 산출물별 연결을 유지한다.
+
+- Given 고정 매출 snapshot과 WEB 조건, When FILTER-01을 수행하면, Then 80만 원과 전체 100만 원의 차이를 설명하고 직원 확인 후 티켓 없이 종료한다.
+- Given 전체 조건에서 90만 원을 반환하는 오류 경로, When LOGIC-01을 수행하면, Then 정상 집계 100만 원과 코드·로그 근거를 초안에 담고 승인 후 현재 팀 티켓으로 연결한다.
+- Given 담당자의 처리 기록, When 직원이 확인하면, Then 상태·처리 결과를 조회할 수 있다. 실제 수정·배포 여부와 직원 재조회 확인은 상태 변경과 별도로 기록한다.
+- Given 자료/팀 정보가 없음, When UNKNOWN-01/OWNER-01을 수행하면, Then 원인을 확정하지 않거나 승인 후 미할당 큐로 접수한다.
+- Given 팀원의 실행 환경, When 문서의 설정·migration·적재·시작 절차를 따르면, Then 두 대표 경로를 실행할 수 있고 재기동 후 티켓이 유지된다. 이는 앞으로 검증할 조건이다.

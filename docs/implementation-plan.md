@@ -1,76 +1,99 @@
-# DeskMate AI Agent 구현 계획 초안
+# DeskMate 프로젝트 완성 로드맵
 
-## 0단계: 계약과 기준선
+기준일: 2026-10-08. 이 문서는 PRD의 목표를 구현 산출물·의존성·검증으로 연결하는 기준 계획이다. 아래 단계는 일정 약속이 아닌 작업 순서다. 인원별 분담·기간·Spring 버전과 빌드 도구는 아직 미정이다.
 
-- PRD·요구사항·아키텍처를 검토하고 모델 접근, synthetic 자료, demo 환경을 확정.
-- 기존 endpoint와 ticket DB의 동작을 고정한 baseline 시나리오 확보.
-- 완료 기준: FR/PRD traceability, 선택 기술 ADR, 비밀 없는 설정 예시.
+## 현재 기준선
 
-## 1단계: PostgreSQL + pgvector 전환
+- 현재 구현: Python `server.py`의 규칙 기반 상담, 정적 Web UI, PostgreSQL 티켓 생성·조회·상태 변경.
+- 기존 검증 기록: PostgreSQL migration, 티켓 CRUD와 pgvector cosine distance smoke. 이는 실제 RAG 검색이나 새 Spring 기능의 검증이 아니다.
+- 준비됨: PostgreSQL + pgvector Compose 구성, 초기 schema, uv 의존성과 migration/import 도구. SQLite 원본은 보존한다.
+- 미구현: 가상 매출 시스템과 fixture, Spring 제품 API·권한·조사 Gateway·승인·배정, Python LLM/RAG, 새 화면과 평가 harness.
+- 기존 DB의 재기동 후 데이터 유지와 rollback 절차도 검증 필요. 이번 문서 갱신에서 실행 검증을 새로 수행하지 않았다.
 
-- 완료: Docker Compose PostgreSQL + pgvector image와 persistent local volume 구성.
-- 완료: Psycopg driver, uv dependency, migration runner 구성.
-- 완료: migration, pgvector extension, ticket CRUD와 cosine distance smoke 검증. embedding retrieval 및 운영 규모 index 성능은 미검증.
-- 완료: SQLite 원본 보존. 기존 source DB 티켓 0건 확인 후 import 실행.
-- 미완료: 재기동 후 persistent volume 확인과 migration rollback 검증.
+## 완성을 위한 7가지 산출물
 
-## 2단계: Spring 백엔드와 Python AI 서비스 계약
+| ID | 산출물 | 책임과 범위 | 연결 요구사항 | 완료 증거 |
+|---|---|---|---|---|
+| D-01 | 가상 업무 시스템 | Spring 기반 `sales-demo` 화면/API, 정상 집계와 오류 집계 경로 | FR-013, FR-014, FR-017 | 같은 snapshot에서 전체 100만 원, WEB 80만 원, 오류 API 90만 원 재현 |
+| D-02 | 조사 데이터와 지식 자료 | 합성 주문 5건, 업무 정의·사용법·이관 기준, 요청 로그·배포 코드·소유 팀 registry | FR-002, FR-003, FR-014, FR-016 | 문서·DB·API·로그·코드·소유 팀 버전과 gold evidence가 일치 |
+| D-03 | Spring 제품 백엔드 | 사용자·권한, 상담 기록, 초안·승인, 티켓·팀 배정·상태·처리 결과 | FR-005~008, FR-012, FR-016, FR-018 | 승인·권한·hash·멱등성 검증, 담당자 처리와 이력 확인 |
+| D-04 | Spring 조사 Gateway | 허용된 집계·로그·코드·소유 팀 조회, 입력·권한·조회 예산 검증 | FR-013, FR-014, FR-016, FR-019 | 허용 조회의 근거 반환, 임의 SQL/쓰기·권한 밖 요청 거부 |
+| D-05 | Python AI Service | 추가 질문, OpenAI 호출, pgvector RAG, 읽기 도구 선택, 사실/가설·안내·초안 | FR-001~004, FR-008, FR-010, FR-011, FR-015, FR-017, FR-018 | 실제 검색·도구 trace로 직원 해결/전문 이관을 구분 |
+| D-06 | 직원·담당자 화면 | 상담·근거·조사 요약, 초안 편집·승인, 팀 티켓 보드·상태·결과, 관리자 미할당 처리 | FR-005, FR-007, FR-016~018, NFR-006 | 문의부터 직원 확인까지 역할별 흐름과 키보드 사용 검증 |
+| D-07 | 평가·실행·발표 패키지 | 고정 사례, 평가 harness·실행 trace, Compose·설정 예시·시작 안내·발표 자료 | FR-009, NFR-001~008 | 버전과 결과 저장, 팀원이 실행, 대표/실패 사례 재현 |
 
-- Spring Boot 제품 API와 Python AI Service의 책임·데이터 소유권을 설계 문서대로 분리.
-- Spring은 인증, 상담 세션, 승인, 티켓과 담당자 할당을 소유하고 Python은 조사 계획·읽기 도구 선택·AI 응답을 담당.
-- `POST /internal/v1/assist` schema, 내부 인증, timeout, request ID, 오류 응답을 확정.
-- 완료 기준: Web UI는 Spring만 호출하고, Spring↔Python 간 정상·오류 응답 계약이 고정됨.
+완료 증거는 앞으로 확보할 항목이다. 위 표는 구현 완료 목록이 아니다. 요구사항 정의는 [명세서](requirements.md), 산출물 연결은 [추적표](traceability.md)를 따른다.
 
-## 2.1단계: 시스템 조사 fixture와 읽기 도구
+## 0단계 — 계약과 기존 동작 고정
 
-- PRD-008~010 / FR-013~019: 가상 매출 시스템 snapshot·API 결과·코드·로그·소유 팀 registry를 같은 버전으로 제작.
-- Spring Gateway에서 허용 query ID, 입력 schema, 권한, 조회 예산을 강제하고 업무 DB 쓰기 금지.
-- Python은 Gateway 응답의 evidence ID로 사실·가설을 구성하고 배포 버전과 관측 시점 불일치를 표시.
-- 완료 기준: 조건 오류는 직원 해결, 집계 코드 오류는 담당 팀 이관, 근거 부족은 미확인 표시로 구분.
+- PRD와 [페르소나·데모 가정](personas-and-demo-scenarios.md)을 기준으로 P0 범위와 역할을 고정한다.
+- Spring 공개 API, `POST /internal/v1/assist`, 조사 도구, 승인·오류 응답 schema를 확정한다.
+- 기존 endpoint·티켓 상태·ID·저장 데이터의 회귀 사례와 이관 비교 방법을 준비한다.
+- 완료 기준: 요구사항 추적, 서비스 경계, 비밀 없는 설정 예시와 회귀 사례가 연결됨.
 
-## 3단계: 모델 기준선과 Agent runtime
+## 1단계 — 가상 업무 시스템·데이터 제작 (D-01, D-02)
 
-- OpenAI Agents SDK와 LLM/RAG는 Python AI Service에서 실행하고, Spring은 typed internal client로만 호출.
-- `docs/llm-strategy.md`의 후보가 API 계정에서 실제 제공되는지, 도구 호출·구조화 출력 지원과 최신 가격을 확인.
-- 우선 API 모델 1종을 연결하고 모델/embedding model 이름을 환경 변수로 주입. API key는 안전한 환경 설정으로 관리.
-- Holdout 사례를 동결한 뒤 동일 조건의 가용 모델 후보를 비교하고 지연·호출비용·실패 사례 기록.
-- 현재 기준선에서 prompt/RAG/tool schema 수정으로 해결할 오류와 fine-tuning 대상 오류를 구분.
-- 완료 기준: 선택 근거, model ID, SDK 버전, 비용 측정 방법과 미검증 항목 기록.
+- [데모 가정](personas-and-demo-scenarios.md)의 주문 5건과 매출 정의를 제작한다. KST 기간, PAID/FULFILLED 포함, CANCELLED 제외를 고정한다.
+- Spring 기반 매출 조회 화면/API에 정상 필터 경로와 PAID만 집계하는 오류 경로를 구성한다. 오류 경로는 데모 전용으로 명시한다.
+- 같은 scenario/snapshot에 문서 버전, request ID, 실제 코드 버전, API→함수 매핑, 로그, 현재 `TEAM-SALES`를 연결한다.
+- 개발/holdout 사례의 원본 fixture·결함 변형은 같은 분할에 두고 gold 정답을 모델 입력에 주입하지 않는다.
+- 완료 기준: AI 없이 FILTER-01의 80→100만 원과 LOGIC-01의 90만 원/정답 100만 원을 재현. 정답 근거를 대조할 수 있음.
 
-## 4단계: synthetic 지식 corpus와 RAG
+## 2단계 — Spring 조사·제품 흐름 구현 (D-03, D-04)
 
-- source metadata/버전이 포함된 업무 지표 정의·조회 조건·직원 조치·전문 이관 가이드 작성.
-- 문서 분할, embedding 생성, index version을 재현 가능한 ingestion command로 구현.
-- 검색 도구는 top-k 구절·source ID·score를 반환하고 답변에 출처 노출.
-- 완료 기준: gold source 평가, 검색 0건 fallback, 문서 prompt injection 테스트.
+의존성: 0단계 계약과 1단계 자료. 아래 순서로 구현하고 AI 없이 먼저 검증한다.
 
-## 5단계: Agent 도구와 승인 경계
+1. 등록 query ID·typed parameter를 사용하는 집계·로그·배포 코드·소유 팀 도구를 구현한다. 권한·예산·마스킹은 Spring이 강제한다.
+2. 기존 Python 티켓 기능을 Spring으로 이관한다. 기존 ID·상태·데이터를 보존하고 동일 UI 요청의 쓰기 주체를 Spring으로 일원화한다.
+3. 사용자/역할, 상담·조사 요약·초안 저장, 초안 편집/hash와 명시적 승인을 구현한다.
+4. 서버 승인·권한·hash·멱등 키 검증 후 생성, 현재 팀 배정, 미등록/충돌/배정 실패 시 미할당 처리를 구현한다.
+5. 담당자가 상태와 처리 결과를 기록하고 직원이 조회할 수 있게 한다.
 
-- Python AI Service는 읽기 전용 문서/업무 조사와 초안 생성을 수행하고, Spring이 승인 후 티켓 API를 실행.
-- 사용자 검토 가능한 ticket draft, 서버 검증 approval ID, idempotency key 구현.
-- Spring TicketService를 PostgreSQL에 연결하고 상태 전이와 변경 이력을 추가.
-- 완료 기준: 승인 없는 쓰기 0건, 반복 호출 중복 0건, 담당자 상태 변경 확인.
+완료 기준: 고정 조사 응답/초안으로도 조회→승인→생성→배정→상태 기록 가능. 미승인·변경된 초안·권한 밖 요청은 거부하며 재시도는 동일 ticket ID를 반환한다. 생성과 배정 실패는 구분한다. 이 단계의 stub 검증은 AI 품질 평가가 아니다.
 
-- 튜닝은 holdout 기준선 및 데이터 이용 허가를 갖춘 후 별도 실험 승인/작업으로 진행.
+## 3단계 — Python RAG·Agent 연결 (D-05)
 
-## 6단계: 평가 harness와 증거 UI
+의존성: D-02 지식 자료와 D-04 실제 조회 도구. Python 명령은 uv와 `.venv`를 사용한다.
 
-- `evals/cases.jsonl` synthetic 사례 60건(개발용 40, holdout 20) 작성 후 고정.
-- retrieval, grounding, classification, tool, safety, latency/cost metric 산출.
-- UI에 검색 근거, tool trace 요약, 티켓 draft, 결과를 보기 쉽게 표시.
-- 완료 기준: 실행 결과가 dataset/model/index/code version과 함께 저장되고 실패를 재현할 수 있음.
+1. 문서 metadata·chunk·embedding·index version을 관리하는 ingestion과 pgvector 검색을 구현한다. 현재 schema는 1536차원이므로 모델 변경 시 호환성을 검증한다.
+2. 모델·embedding 후보의 실제 가용성, 도구 호출/구조화 출력, 가격을 확인하고 환경 변수로 주입한다. 초기에는 OpenAI API 모델 하나로 시작한다.
+3. Spring↔Python 내부 인증·timeout·request ID·오류 계약을 연결한다. 공개 UI는 Spring만 호출한다.
+4. 단일 Agent가 누락 정보 질문→문서 검색→필요한 읽기 조사→사실/가설/미확인 항목→안내 또는 초안을 반환하게 한다.
+5. 검색 0건·모델 timeout·도구 거부·버전 불일치에 대해 조사 제한을 설명한다. Python은 업무 DB 직접 접근과 티켓 쓰기를 하지 않는다.
 
-## 7단계: 통합 리허설과 발표
+완료 기준: RAG는 업무 정의·사용법을, 도구는 실제 값·로그·코드를 제공하며 양쪽 근거를 추적할 수 있음. FILTER-01은 불필요한 코드 조회 없이 안내하고, LOGIC-01은 근거 포함 이관 초안을 반환함. 근거 부족을 원인 확정으로 바꾸지 않음.
 
-- happy path와 검색·모델·DB 오류 path 리허설.
-- 모바일/키보드 접근, localhost 설정, 데모 DB reset 절차 점검.
-- 발표 순서: 아키텍처 → RAG 근거 → tool trace → 승인 → 티켓 → 평가 실패 분석.
-- 완료 기준: 동일 환경에서 3회 연속 종단 간 시연, 미구현/미실행 범위 명시.
+초기 fine-tuning·다중 Agent는 제외한다. 모델 비교 및 튜닝 판단은 고정 기준선의 반복 오류 분석과 데이터 이용 조건 확인 후 별도 작업으로 진행한다.
 
-## 의존성과 위험
+## 4단계 — 화면 통합·평가·발표 (D-06, D-07)
 
-- 모델 호출을 위해 실제 credential 및 네트워크 access가 필요할 수 있음.
-- embedding 비용, 한국어 검색 성능, 모델 비결정성이 평가 결과에 영향.
-- SQLite ticket DB에서 PostgreSQL로 데이터 이관할 경우 backup·행 수·ID·상태 비교가 필요.
-- 인증 없는 localhost 데모를 공용 네트워크에 공개하지 않음.
-- Spring/Python 서비스 간 장애·버전 불일치·공유 DB 권한 경계에 대한 통합 검증 필요.
+의존성: 앞 단계 API·AI·데이터. 평가 사례와 trace 설계는 1단계부터 준비하고 실제 실행 결과는 통합 후 확보한다.
+
+- 직원 화면에 추가 질문, 문서/관측 근거, 확인 사실·원인 후보, 안내, 초안 편집·승인과 실제 ticket ID를 표시한다.
+- 담당자 보드에 팀 배정·재현 조건·근거·미확인 항목·상태·처리 결과를 제공한다. 관리자는 미할당 티켓을 처리한다.
+- `evals/cases.jsonl` 60건(개발 40, holdout 20)과 harness를 작성한다. 버전·통과/실패/미실행·지연·비용을 기록한다.
+- FILTER-01, LOGIC-01, UNKNOWN-01, OWNER-01을 통합 확인하고 권한 거부, 승인 거부/초안 변경, 중복 재시도, 배정 실패도 검사한다.
+- Compose에 제품 API·AI Service·DB와 업무 시스템 실행 단위를 정리하고 설정·migration·자료 적재·시작·검증 순서를 문서화한다.
+- 재시연은 별도 demo dataset/namespace에서 수행한다. 기존 사용자 티켓과 SQLite 원본을 삭제하지 않는다.
+
+완료 기준: 아래 프로젝트 완료 체크리스트를 충족하고 [평가 계획](agent-evaluation.md)의 제안 목표에 대한 실제 결과와 미달 항목을 기록함. 약 7분 발표안은 제안이며 고정 일정이 아니다.
+
+## 프로젝트 완료 체크리스트
+
+- [ ] FILTER-01: WEB 80만 원→전체 100만 원, 직원 확인 후 종료, 티켓 0건
+- [ ] LOGIC-01: 기대 100만 원/실제 90만 원을 조사하고, 승인 후 현재 팀 접수·담당자 처리·직원 확인
+- [ ] UNKNOWN-01/OWNER-01: 근거 부족은 미확정, 팀 미등록은 승인 후 미할당 큐
+- [ ] 권한 거부·미승인·초안 변경·응답 유실 재시도·배정 실패를 검증하고 허위 성공/중복 생성 없음
+- [ ] 대표 두 경로를 같은 버전에서 3회 연속 시연하고 실제 요청·티켓·근거 trace 보존
+- [ ] 평가 결과에 dataset/model/prompt/index/code 버전과 실패·미실행 항목 기록
+- [ ] 팀원이 설정 안내로 실행하고 재기동 후 데이터 유지 확인, 핵심 화면 키보드 사용 가능
+- [ ] 실제 LLM·도구 실행, 고정 fixture, mock/영상과 미구현 범위를 발표에서 구분
+
+3회 리허설은 실행 재현성을 확인하는 제안 기준이며 정확도 측정을 대신하지 않는다. 코드 수정·배포는 담당자가 별도로 수행한다. 상태 변경만으로 실제 결함 수정 완료를 주장하지 않는다.
+
+## 의존성과 미결정 사항
+
+- 모델 접근 credential·네트워크, 후보 가용성/가격, 한국어 검색 성능은 구현 시 확인한다. 비밀 값은 저장소·문서에 기록하지 않는다.
+- Spring Java/Boot 버전·빌드 도구, 내부 인증, migration 소유권, 실제 배포 설정은 구현 전에 확정한다.
+- DeskMate 저장 DB와 업무 DB는 분리하고 서비스별 최소 권한을 적용한다. Python은 지식 검색/적재 계정만 사용한다.
+- 실제 사내 연동, 외부 티켓 플랫폼, 실제 직원 알림, 자동 수정·배포, 추가 업무 시스템은 MVP 이후 범위다.
