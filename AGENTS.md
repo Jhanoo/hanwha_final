@@ -10,9 +10,9 @@
 ## 프로젝트와 실행
 
 - 핵심 결과물은 사내 IT 상담 → 해결 가이드 → 미해결 티켓 접수 → 상태 조회·변경 데모다.
-- `server.py`는 Python 표준 라이브러리 HTTP API와 SQLite 저장소다. `web/`은 HTML, CSS, JavaScript UI다.
+- `server.py`는 Python HTTP API와 PostgreSQL 저장소다. 연결 정보는 `.env`에서 읽고 migration은 `scripts/migrate.py`로 적용한다. `web/`은 HTML, CSS, JavaScript UI다.
 - Python 명령은 uv로 생성한 `.venv`에서 실행한다. 생성: `UV_CACHE_DIR=/workspace/.cache/uv uv venv --python python3 .venv`. 실행: `.venv/bin/python server.py`.
-- 현재 상담은 규칙 기반이며 티켓은 로컬 SQLite다. 실제 LLM·Jira·ServiceNow 연동 여부를 사실대로 구분하고 데모 기능을 실서비스 기능으로 설명하지 않는다.
+- 현재 상담은 규칙 기반이며 티켓은 PostgreSQL이다. 기존 SQLite 파일은 이관 후에도 원본으로 보존한다. 실제 LLM·Jira·ServiceNow 연동 여부를 사실대로 구분하고 데모 기능을 실서비스 기능으로 설명하지 않는다.
 - 실행·발표 흐름은 `README.md`를 참고한다.
 
 ## 필요한 스킬만 사용

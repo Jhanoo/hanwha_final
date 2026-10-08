@@ -15,9 +15,10 @@ async function chat(message) {
     const result = await api('/api/chat', {message});
     const node = bubble(result.answer + '\n\n' + result.steps.map((step,i)=>`${i+1}. ${step}`).join('\n'));
     const button = document.createElement('button'); button.textContent = '미해결 · 티켓 접수'; node.append(button);
+    const idempotencyKey = crypto.randomUUID();
     button.onclick = async () => {
       button.disabled = true;
-      try { const ticket = await api('/api/tickets', {title:message,priority:'보통'}); button.textContent = '접수 완료'; bubble(`티켓 IT-${String(ticket.id).padStart(4,'0')}을 접수했습니다. 분류: ${ticket.category}\n오른쪽 지원 티켓에서 진행 상황을 확인할 수 있습니다.`); await refresh(); }
+      try { const ticket = await api('/api/tickets', {title:message,priority:'보통',idempotency_key:idempotencyKey}); button.textContent = '접수 완료'; bubble(`티켓 IT-${String(ticket.id).padStart(4,'0')}을 접수했습니다. 분류: ${ticket.category}\n오른쪽 지원 티켓에서 진행 상황을 확인할 수 있습니다.`); await refresh(); }
       catch(error) {button.disabled=false; bubble(error.message);}
     };
     $('messages').scrollTop = $('messages').scrollHeight;

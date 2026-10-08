@@ -3,7 +3,7 @@
 ## 엔진과 적용 범위
 
 - **목표 시연 DB:** PostgreSQL 17 + pgvector 확장. Python 앱과 Docker Compose로 로컬 실행한다.
-- **현재 상태:** 실제 앱은 아직 SQLite `.local/tickets.db`를 사용한다. 본 문서는 교체 전 설계이며 마이그레이션은 적용하지 않았다.
+- **전환 상태:** 앱과 로컬 Docker PostgreSQL + pgvector 연결을 완료했다. 기존 `.local/tickets.db`는 원본으로 보존했고 legacy import 명령을 제공한다.
 - **임베딩 기준 후보:** `text-embedding-3-small`, vector(1536). 실제 모델을 변경하면 차원과 기존 index 전체 재생성을 함께 조정한다.
 - 목표 DB는 상담·티켓의 관계형 정합성과 지식 chunk 유사도 검색을 한 엔진에 모아 데모 운영을 단순하게 한다.
 
@@ -68,4 +68,4 @@ LIMIT $3;
 6. SQLite에서 전환할 경우 기존 데이터 백업 후 명시적 import, 행 수·ID·상태 대조. 기존 DB 삭제는 별도 확인 없이 하지 않는다.
 7. compose volume에 실제 persistent data가 남는지 컨테이너 재생성으로 확인.
 
-이 검증은 아직 실행되지 않았다. 현재 작업은 스키마·설계 초안만 작성했다.
+로컬 Docker PostgreSQL 17에서 migration과 pgvector 확장을 적용했다. API의 health/chat/ticket 생성·조회·상태 변경, 멱등 재시도, pgvector cosine distance를 smoke 검증했다. 기존 SQLite에는 티켓이 0건이었다. 브라우저 UI 전체 흐름, embedding ingestion/retrieval, LLM 호출은 아직 구현·검증하지 않았다.
