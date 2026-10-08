@@ -1,0 +1,44 @@
+{
+  "name": "hanwha-it-agent",
+  "interface": {
+    "displayName": "Hanwha IT Agent 개발 도구"
+  },
+  "plugins": [
+    {
+      "name": "openai-developers",
+      "source": {
+        "source": "local",
+        "path": "./.local/codex-plugins/plugins/openai-developers"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "plugin-eval",
+      "source": {
+        "source": "local",
+        "path": "./.local/codex-plugins/plugins/plugin-eval"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
+      "name": "atlassian-rovo",
+      "source": {
+        "source": "local",
+        "path": "./.local/codex-plugins/plugins/atlassian-rovo"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
