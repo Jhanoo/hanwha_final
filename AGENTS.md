@@ -22,6 +22,18 @@
 - 스킬의 제안보다 사용자 요구와 기존 프로젝트 제약을 우선한다. 관련 없는 작업에는 스킬을 강제로 적용하지 않는다.
 - 출처, 라이선스, 실행 전제는 [.agents/skills/README.md](.agents/skills/README.md)를 참고한다.
 
+## 프로젝트 단계별 스킬 선택
+
+- 전체 목록과 출처는 [.agents/skills/README.md](.agents/skills/README.md)를 읽는다. 모든 스킬을 한 번에 로드하지 않고 현재 작업에 필요한 지침만 읽는다.
+- PRD·MVP 기획: [.agents/skills/project-prd/SKILL.md](.agents/skills/project-prd/SKILL.md)
+- 요구사항 명세·수용 기준·추적: [.agents/skills/project-requirements/SKILL.md](.agents/skills/project-requirements/SKILL.md)
+- 아키텍처·ADR·구현 계획: [.agents/skills/project-architecture/SKILL.md](.agents/skills/project-architecture/SKILL.md)
+- ERD·DB 생성·마이그레이션: [.agents/skills/project-database/SKILL.md](.agents/skills/project-database/SKILL.md). PostgreSQL 작업에만 [.agents/skills/supabase-postgres-best-practices/SKILL.md](.agents/skills/supabase-postgres-best-practices/SKILL.md)를 함께 적용한다.
+- API 명세·티켓 어댑터: [.agents/skills/project-api-contract/SKILL.md](.agents/skills/project-api-contract/SKILL.md). MCP 도구를 만들 때만 [.agents/skills/mcp-builder/SKILL.md](.agents/skills/mcp-builder/SKILL.md)를 추가 사용한다.
+- 실제 AI·RAG·도구 호출 평가: [.agents/skills/project-agent-evaluation/SKILL.md](.agents/skills/project-agent-evaluation/SKILL.md)
+- 테스트·CI·배포·발표: [.agents/skills/project-delivery/SKILL.md](.agents/skills/project-delivery/SKILL.md). Python 브라우저 자동화에는 [.agents/skills/webapp-testing/SKILL.md](.agents/skills/webapp-testing/SKILL.md)를 읽는다.
+- 공개 스킬의 Claude 전용 도구명은 사용 가능한 Codex 도구로 대응한다. uv, 기존 데이터 보존, 프로젝트 경로와 사용자 요구를 우선한다. 외부 패키지·서비스를 설치한 것으로 가정하지 않는다.
+
 ## 변경 검증
 
 - API 변경 시 정상 요청, 잘못된 입력, 해당 티켓 생성·조회·상태 변경을 검증한다. 검증 데이터는 기존 사용자 데이터와 구분하고 검증 중 만든 데이터만 정리한다.
